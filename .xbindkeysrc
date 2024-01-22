@@ -1,0 +1,22 @@
+# Increase volume
+"wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"
+   XF86AudioRaiseVolume
+# Lower volume
+"wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+   XF86AudioLowerVolume
+
+# Mute volume
+"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+   XF86AudioMute
+
+# Play / Pause
+"playerctl play-pause"
+   XF86AudioPlay
+
+# Next
+"playerctl next"
+   XF86AudioNext
+
+# Previous
+"playerctl previous" 
+   XF86AudioPrev
