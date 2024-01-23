@@ -62,19 +62,19 @@ modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
---    awful.layout.suit.floating,
-      awful.layout.suit.tile,
---    awful.layout.suit.tile.left,
---    awful.layout.suit.tile.bottom,
---    awful.layout.suit.tile.top,
---    awful.layout.suit.fair,
---    awful.layout.suit.fair.horizontal,
---    awful.layout.suit.spiral,
---    awful.layout.suit.spiral.dwindle,
---    awful.layout.suit.max,
---    awful.layout.suit.max.fullscreen,
---    awful.layout.suit.magnifier,
---    awful.layout.suit.corner.nw,
+    awful.layout.suit.tile,
+    awful.layout.suit.floating,
+   -- awful.layout.suit.tile.left,
+   -- awful.layout.suit.tile.bottom,
+   -- awful.layout.suit.tile.top,
+   -- awful.layout.suit.fair,
+   -- awful.layout.suit.fair.horizontal,
+   -- awful.layout.suit.spiral,
+   -- awful.layout.suit.spiral.dwindle,
+   -- awful.layout.suit.max,
+   -- awful.layout.suit.max.fullscreen,
+   -- awful.layout.suit.magnifier,
+   -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
@@ -453,15 +453,18 @@ root.keys(globalkeys)
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = beautiful.border_width,
+      
+        properties = { border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      raise = true,
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-                     placement = awful.placement.no_overlap+awful.placement.no_offscreen
-     }
+                     placement = awful.placement.no_overlap+awful.placement.no_offscreen,
+                     callback = awful.client.setslave
+        
+        }
     },
 
     -- Floating clients.
@@ -495,14 +498,14 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
-    -- Add titlebars to normal clients and dialogs
-    --{ rule_any = {type = { "normal", "dialog" }
-    --  }, properties = { titlebars_enabled = true }
-    --},
+     --Add titlebars to normal clients and dialogs
+    { rule_any = {type = { "normal", "dialog" }
+      }, properties = { titlebars_enabled = true }
+    },
 
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+     --Set Firefox to always map on the tag named "2" on screen 1.
+     { rule = { class = "Firefox" },
+       properties = { screen = 1, tag = "2" } },
 }
 -- }}}
 
@@ -522,44 +525,44 @@ client.connect_signal("manage", function (c)
 end)
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
---client.connect_signal("request::titlebars", function(c)
-    -- buttons for the titlebar
-    --local buttons = gears.table.join(
-    --    awful.button({ }, 1, function()
-    --        c:emit_signal("request::activate", "titlebar", {raise = true})
-    --        awful.mouse.client.move(c)
-    --    end),
-    --    awful.button({ }, 3, function()
-    --        c:emit_signal("request::activate", "titlebar", {raise = true})
-    --        awful.mouse.client.resize(c)
-    --    end)
-    --)
+client.connect_signal("request::titlebars", function(c)
+     --buttons for the titlebar
+    local buttons = gears.table.join(
+        awful.button({ }, 1, function()
+            c:emit_signal("request::activate", "titlebar", {raise = true})
+            awful.mouse.client.move(c)
+        end),
+        awful.button({ }, 3, function()
+            c:emit_signal("request::activate", "titlebar", {raise = true})
+            awful.mouse.client.resize(c)
+        end)
+    )
 
-    --awful.titlebar(c) : setup {
-    --    { -- Left
-    --        awful.titlebar.widget.iconwidget(c),
-    --        buttons = buttons,
-    --        layout  = wibox.layout.fixed.horizontal
-    --    },
-    --    { -- Middle
-    --        { -- Title
-    --            align  = "center",
-    --            widget = awful.titlebar.widget.titlewidget(c)
-    --        },
-    --        buttons = buttons,
-    --        layout  = wibox.layout.flex.horizontal
-    --    },
-    --    { -- Right
-    --        awful.titlebar.widget.floatingbutton (c),
-    --        awful.titlebar.widget.maximizedbutton(c),
-    --        awful.titlebar.widget.stickybutton   (c),
-    --        awful.titlebar.widget.ontopbutton    (c),
-    --        awful.titlebar.widget.closebutton    (c),
-    --        layout = wibox.layout.fixed.horizontal()
-    --    },
-    --    layout = wibox.layout.align.horizontal
-    --}
---end)
+    awful.titlebar(c) : setup {
+        { -- Left
+            awful.titlebar.widget.iconwidget(c),
+            buttons = buttons,
+            layout  = wibox.layout.fixed.horizontal
+        },
+        { -- Middle
+            { -- Title
+                align  = "center",
+                widget = awful.titlebar.widget.titlewidget(c)
+            },
+            buttons = buttons,
+            layout  = wibox.layout.flex.horizontal
+        },
+        { -- Right
+            awful.titlebar.widget.floatingbutton (c),
+            awful.titlebar.widget.maximizedbutton(c),
+            awful.titlebar.widget.stickybutton   (c),
+            awful.titlebar.widget.ontopbutton    (c),
+            awful.titlebar.widget.closebutton    (c),
+            layout = wibox.layout.fixed.horizontal()
+        },
+        layout = wibox.layout.align.horizontal
+    }
+end)
 
 -- Enable sloppy focus, so that focus follows mouse.
 --client.connect_signal("mouse::enter", function(c)
@@ -573,6 +576,36 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Gaps
 beautiful.useless_gap = 5
 
+-- title bar
+client.connect_signal("property::floating", function(c)
+    local b = false;
+    if c.first_tag ~= nil then
+        b = c.first_tag.layout.name == "floating"
+    end
+    if c.floating or b then
+        awful.titlebar.show(c)
+    else
+        awful.titlebar.hide(c)
+    end
+end)
+
+client.connect_signal("manage", function(c)
+    if c.floating then
+        awful.titlebar.show(c)
+    else
+        awful.titlebar.hide(c)
+    end
+end)
+tag.connect_signal("property::layout", function(t)
+    local clients = t:clients()
+    for k,c in pairs(clients) do
+        if c.floating or c.first_tag.layout.name == "floating" then
+            awful.titlebar.show(c)
+        else
+            awful.titlebar.hide(c)
+        end
+    end
+end)
 -- Autostart
 
 awful.spawn.with_shell("nitrogen --set-zoom-fill --random ~/wallpapers")
