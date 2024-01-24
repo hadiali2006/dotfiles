@@ -9,12 +9,12 @@ configuration {
 @theme "/dev/null"
 
 * {
-  bg: #1e1e2e66;
-  bg-alt: #585b7066;
-  bg-selected: #31324466;
+  bg: #232627;
+  bg-alt: #31363b;
+  bg-selected: #545e5f;
 
-  fg: #cdd6f4;
-  fg-alt: #7f849c;
+  fg: #fcfcfc;
+  fg-alt: #eff0f1;
 
   
   border: 0;
@@ -31,6 +31,7 @@ window {
 element {
   padding: 8 12;
   background-color: transparent;
+  //background-color: black;
   text-color: @fg-alt;
 }
 
