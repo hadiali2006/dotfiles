@@ -6,7 +6,6 @@ pcall(require, "luarocks.loader")
 local gears = require("gears")
 local awful = require("awful")
 require("awful.autofocus")
-require("collision")()
 -- Widget and layout library
 local wibox = require("wibox")
 -- Theme handling library
@@ -337,28 +336,16 @@ globalkeys = gears.table.join(
 		end
 	end, { description = "restore minimized", group = "client" }),
 
-	-- dmenu
+	-- rofi
 	awful.key({ modkey }, "z", function()
-		awful.util.spawn("dmenu_run")
-	end, { description = "launch dmenu", group = "custom" }),
+		awful.util.spawn("rofi -show drun")
+	end, { description = "rofi drun", group = "custom" }),
 
 	-- Firefox
 	awful.key({ modkey }, "a", function()
 		awful.util.spawn("firefox")
-	end, { description = "firefox", group = "custom" }),
+	end, { description = "firefox", group = "custom" })
 
-	awful.key({ modkey }, "x", function()
-		awful.prompt.run({
-			prompt = "Run Lua code: ",
-			textbox = awful.screen.focused().mypromptbox.widget,
-			exe_callback = awful.util.eval,
-			history_path = awful.util.get_cache_dir() .. "/history_eval",
-		})
-	end, { description = "lua execute prompt", group = "awesome" }),
-	-- Menubar
-	awful.key({ modkey }, "p", function()
-		menubar.show()
-	end, { description = "show the menubar", group = "launcher" })
 )
 
 clientkeys = gears.table.join(
@@ -630,3 +617,4 @@ end)
 
 awful.spawn.with_shell("nitrogen --set-zoom-fill --random ~/wallpapers")
 awful.spawn.with_shell("picom")
+awful.spawn.with_shell("xbindkeys")
