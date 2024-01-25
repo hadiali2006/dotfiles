@@ -16,7 +16,8 @@ base-devel
 lf
 git
 fzf
-unclutter
+eza             <- consider lsd instead both are good
+unclutter        
 fastfetch
 neovim
 zsh
@@ -26,6 +27,7 @@ xbindkeys
 nvidia-settings
 firefox
 discord
+qbittorrent
 code
 noto-fonts
 noto-fonts-extra
