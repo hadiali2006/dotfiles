@@ -271,9 +271,6 @@ globalkeys = gears.table.join(
 	awful.key({ modkey }, "k", function()
 		awful.client.focus.byidx(-1)
 	end, { description = "focus previous by index", group = "client" }),
-	awful.key({ modkey }, "w", function()
-		mymainmenu:show()
-	end, { description = "show main menu", group = "awesome" }),
 
 	-- Layout manipulation
 	awful.key({ modkey, "Shift" }, "j", function()
@@ -581,7 +578,7 @@ end)
 -- }}}
 
 -- Gaps
-beautiful.useless_gap = 5
+beautiful.useless_gap = 5 
 
 -- title bar
 client.connect_signal("property::floating", function(c)
@@ -615,7 +612,7 @@ tag.connect_signal("property::layout", function(t)
 end)
 -- Autostart
 
-awful.spawn.with_shell("nitrogen --set-zoom-fill --random ~/wallpapers")
 awful.spawn.with_shell("picom")
 awful.spawn.with_shell("xbindkeys")
 awful.spawn.with_shell("unclutter")
+awful.spawn.with_shell("xwallpaper --screen 0 --zoom ~/wallpapers/wall.jpg")
