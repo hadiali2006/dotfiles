@@ -5,7 +5,7 @@
 Pacman Pkgs:
 ```diff
 !(ARCHINSTALLED)
-alacritty
+alacritty       <- kitty or st better maybe
 awesome
 xorg-xinit
 ly
@@ -16,15 +16,18 @@ base-devel
 lf
 git
 fzf
-neofetch
+fastfetch
 neovim
 zsh
+wireplumber
 playerctl
 xbindkeys
 nvidia-settings
 firefox
 discord
 code
+noto-fonts
+noto-fonts-extra
 noto-fonts-cjk
 noto-fonts-emoji
 ttf-jetbrains-mono-nerd
