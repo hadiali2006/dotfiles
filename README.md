@@ -16,6 +16,7 @@ base-devel
 lf
 git
 fzf
+unclutter
 fastfetch
 neovim
 zsh
