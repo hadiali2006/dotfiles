@@ -5,7 +5,7 @@
 Pacman Pkgs:
 ```diff
 !(ARCHINSTALLED)
-alacritty
+alacritty       <- kitty or st better maybe
 awesome
 xorg-xinit
 ly
@@ -16,15 +16,19 @@ base-devel
 lf
 git
 fzf
-neofetch
+unclutter
+fastfetch
 neovim
 zsh
+wireplumber
 playerctl
 xbindkeys
 nvidia-settings
 firefox
 discord
 code
+noto-fonts
+noto-fonts-extra
 noto-fonts-cjk
 noto-fonts-emoji
 ttf-jetbrains-mono-nerd
@@ -56,3 +60,6 @@ console-mode max
 ```
 (visual soy code / visual soy codium titlebar color fix) go settings search for 
 ```"window.titleBarStyle": "native"``` and switch it to custom
+better fonts maybe? im not sure if this does anything
+go to /etc/enviroment and paste ```FREETYPE_PROPERTIES="cff:no-stem-darkening=0 autofitter:no-stem-darkening=0"```
+
