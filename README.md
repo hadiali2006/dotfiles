@@ -59,3 +59,6 @@ console-mode max
 ```
 (visual soy code / visual soy codium titlebar color fix) go settings search for 
 ```"window.titleBarStyle": "native"``` and switch it to custom
+better fonts maybe? im not sure if this does anything
+go to /etc/enviroment and paste ```FREETYPE_PROPERTIES="cff:no-stem-darkening=0 autofitter:no-stem-darkening=0"```
+
