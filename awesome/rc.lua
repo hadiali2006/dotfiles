@@ -264,7 +264,6 @@ globalkeys = gears.table.join(
 	awful.key({ modkey }, "Left", awful.tag.viewprev, { description = "view previous", group = "tag" }),
 	awful.key({ modkey }, "Right", awful.tag.viewnext, { description = "view next", group = "tag" }),
 	awful.key({ modkey }, "Escape", awful.tag.history.restore, { description = "go back", group = "tag" }),
-
 	awful.key({ modkey }, "j", function()
 		awful.client.focus.byidx(1)
 	end, { description = "focus next by index", group = "client" }),
@@ -299,7 +298,6 @@ globalkeys = gears.table.join(
 	end, { description = "open a terminal", group = "launcher" }),
 	awful.key({ modkey, "Control" }, "r", awesome.restart, { description = "reload awesome", group = "awesome" }),
 	awful.key({ modkey, "Shift" }, "q", awesome.quit, { description = "quit awesome", group = "awesome" }),
-
 	awful.key({ modkey }, "l", function()
 		awful.tag.incmwfact(0.05)
 	end, { description = "increase master width factor", group = "layout" }),
@@ -342,7 +340,6 @@ globalkeys = gears.table.join(
 	awful.key({ modkey }, "a", function()
 		awful.util.spawn("firefox")
 	end, { description = "firefox", group = "custom" })
-
 )
 
 clientkeys = gears.table.join(
@@ -534,7 +531,7 @@ client.connect_signal("request::titlebars", function(c)
 		end),
 		awful.button({}, 3, function()
 			c:emit_signal("request::activate", "titlebar", { raise = true })
-		    awful.mouse.client.resize(c)
+			awful.mouse.client.resize(c)
 		end)
 	)
 
@@ -578,7 +575,7 @@ end)
 -- }}}
 
 -- Gaps
-beautiful.useless_gap = 5 
+beautiful.useless_gap = 5
 
 -- title bar
 client.connect_signal("property::floating", function(c)
@@ -599,6 +596,10 @@ client.connect_signal("manage", function(c)
 	else
 		awful.titlebar.hide(c)
 	end
+	if c.name == "polybar-topbar_DP-2" or "Eww-bar" then
+		awful.titlebar.hide(c)
+		c.border_width = 0
+	end
 end)
 tag.connect_signal("property::layout", function(t)
 	local clients = t:clients()
@@ -610,9 +611,12 @@ tag.connect_signal("property::layout", function(t)
 		end
 	end
 end)
+
 -- Autostart
 
 awful.spawn.with_shell("picom")
-awful.spawn.with_shell("xbindkeys")
+awful.spawn.with_shell("sxhkd")
 awful.spawn.with_shell("unclutter")
-awful.spawn.with_shell("xwallpaper --screen 0 --zoom ~/wallpapers/wall.jpg")
+awful.spawn.with_shell("feh --bg-fill --randomize ~/wallpapers/")
+--awful.spawn.with_shell("/home/hadi/scripts/launchpoly.sh")
+awful.spawn.with_shell("/home/hadi/scripts/launcheww.sh")

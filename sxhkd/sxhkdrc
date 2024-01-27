@@ -1,0 +1,20 @@
+XF86AudioRaiseVolume
+  wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 0.01+
+
+XF86AudioLowerVolume
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-
+
+XF86AudioMute
+  wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+
+XF86Audio{Prev,Next}
+  playerctl {previous, next}
+
+XF86AudioPlay
+  playerctl play-pause
+
+
+
+
+
+
