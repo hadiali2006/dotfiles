@@ -261,8 +261,8 @@ end)
 -- {{{ Key bindings
 globalkeys = gears.table.join(
 	awful.key({ modkey }, "s", hotkeys_popup.show_help, { description = "show help", group = "awesome" }),
-	awful.key({ modkey }, "Left", awful.tag.viewprev, { description = "view previous", group = "tag" }),
-	awful.key({ modkey }, "Right", awful.tag.viewnext, { description = "view next", group = "tag" }),
+	awful.key({ modkey, "Shift" }, "Left", awful.tag.viewprev, { description = "view previous", group = "tag" }),
+	awful.key({ modkey, "Shift" }, "Right", awful.tag.viewnext, { description = "view next", group = "tag" }),
 	awful.key({ modkey }, "Escape", awful.tag.history.restore, { description = "go back", group = "tag" }),
 	awful.key({ modkey }, "j", function()
 		awful.client.focus.byidx(1)
@@ -299,10 +299,10 @@ globalkeys = gears.table.join(
 	awful.key({ modkey, "Control" }, "r", awesome.restart, { description = "reload awesome", group = "awesome" }),
 	awful.key({ modkey, "Shift" }, "q", awesome.quit, { description = "quit awesome", group = "awesome" }),
 	awful.key({ modkey }, "l", function()
-		awful.tag.incmwfact(0.05)
+		awful.tag.incmwfact(0.01)
 	end, { description = "increase master width factor", group = "layout" }),
 	awful.key({ modkey }, "h", function()
-		awful.tag.incmwfact(-0.05)
+		awful.tag.incmwfact(-0.01)
 	end, { description = "decrease master width factor", group = "layout" }),
 	awful.key({ modkey, "Shift" }, "h", function()
 		awful.tag.incnmaster(1, nil, true)
@@ -331,6 +331,14 @@ globalkeys = gears.table.join(
 		end
 	end, { description = "restore minimized", group = "client" }),
 
+  awful.key({ modkey }, "Right",    function () awful.tag.incmwfact( 0.01)
+  end, {description = "move right", group = "layout"}),
+  awful.key({ modkey }, "Left",     function () awful.tag.incmwfact(-0.01)
+  end, { description = "move left", group = "layout" }),
+  awful.key({ modkey }, "Down",     function () awful.client.incwfact( 0.05)
+  end, { description = "move down", group = "layout" }),
+  awful.key({ modkey }, "Up",       function () awful.client.incwfact(-0.05)
+  end, { description = "move up", group = "layout"}),
 	-- rofi
 	awful.key({ modkey }, "z", function()
 		awful.util.spawn("rofi -show drun")
@@ -505,6 +513,16 @@ awful.rules.rules = {
 
 	--Set Firefox to always map on the tag named "2" on screen 1.
 	{ rule = { class = "Firefox" }, properties = { screen = 1, tag = "2" } },
+
+	{
+		rule_any = {
+			name = {
+				"polybar-topbar_DP-2",
+				"Eww - bar",
+			},
+		},
+		properties = { border_width = 0 },
+	},
 }
 -- }}}
 
@@ -573,50 +591,15 @@ client.connect_signal("unfocus", function(c)
 	c.border_color = beautiful.border_normal
 end)
 -- }}}
-
 -- Gaps
 beautiful.useless_gap = 5
 
 -- title bar
-client.connect_signal("property::floating", function(c)
-	local b = false
-	if c.first_tag ~= nil then
-		b = c.first_tag.layout.name == "floating"
-	end
-	if c.floating or b then
-		awful.titlebar.show(c)
-	else
-		awful.titlebar.hide(c)
-	end
-end)
-
-client.connect_signal("manage", function(c)
-	if c.floating then
-		awful.titlebar.show(c)
-	else
-		awful.titlebar.hide(c)
-	end
-	if c.name == "polybar-topbar_DP-2" or "Eww-bar" then
-		awful.titlebar.hide(c)
-		c.border_width = 0
-	end
-end)
-tag.connect_signal("property::layout", function(t)
-	local clients = t:clients()
-	for k, c in pairs(clients) do
-		if c.floating or c.first_tag.layout.name == "floating" then
-			awful.titlebar.show(c)
-		else
-			awful.titlebar.hide(c)
-		end
-	end
-end)
-
+client.connect_signal("manage", function(c) awful.titlebar.hide(c) end)
 -- Autostart
-
-awful.spawn.with_shell("picom")
-awful.spawn.with_shell("sxhkd")
-awful.spawn.with_shell("unclutter")
-awful.spawn.with_shell("feh --bg-fill --randomize ~/wallpapers/")
---awful.spawn.with_shell("/home/hadi/scripts/launchpoly.sh")
-awful.spawn.with_shell("/home/hadi/scripts/launcheww.sh")
+awful.spawn.with_shell("/home/hadi/scripts/launchpicom.sh")
+awful.spawn.with_shell("/home/hadi/scripts/launchsxhkd.sh")
+awful.spawn.with_shell("/home/hadi/scripts/launchunclutter.sh")
+awful.spawn.with_shell("/home/hadi/scripts/launchfehwallpaper.sh")
+--awful.spawn.with_shell("/home/hadi/scripts/launchpolybar.sh")
+--awful.spawn.with_shell("/home/hadi/scripts/launchewwbar.sh")
