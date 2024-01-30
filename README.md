@@ -4,19 +4,16 @@
 
 Pacman Pkgs:
 ```diff
-!(ARCHINSTALLED)
-alacritty       <- kitty or st better maybe
-awesome
++(install)
+alacritty       
+rustup
 xorg-xinit
 ly
-networkmanager  <- needed for internet even wired idk why
-
-+(install)
 base-devel
 lf
 git
 fzf
-eza             <- consider lsd instead both are good
+eza             
 unclutter        
 fastfetch
 neovim
@@ -26,7 +23,6 @@ playerctl
 xbindkeys
 nvidia-settings
 firefox
-discord
 qbittorrent
 code
 noto-fonts
@@ -39,11 +35,12 @@ ttf-nerd-fonts-symbols
 Build from src / clone:
 ```
 paru
-kickstart.nvim
+eww
 ```
 
 AUR Pkgs (paru):
 ```
+awesome-git
 picom-git
 vscodium
 intellij-idea-ultimate-edition-jre
@@ -54,14 +51,13 @@ intellij-idea-ultimate-edition
 ```diff 
 @@  random fixes / config changes  @@
 ```
-(Soystemd/tty idk is wrong resolution fix) Edit /boot/loader/loader.conf
+Edit /boot/loader/loader.conf
 ```diff
 timeout 3
 console-mode max
 # console-mode keep
 ```
-(visual soy code / visual soy codium titlebar color fix) go settings search for 
-```"window.titleBarStyle": "native"``` and switch it to custom
-better fonts maybe? im not sure if this does anything
+vscode go to settings search for ```"window.titleBarStyle": "native"``` and switch it to custom
+
 go to /etc/enviroment and paste ```FREETYPE_PROPERTIES="cff:no-stem-darkening=0 autofitter:no-stem-darkening=0"```
 
