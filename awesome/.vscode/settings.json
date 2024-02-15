@@ -1,0 +1,10 @@
+{
+    "Lua.diagnostics.globals": [
+        "awesome",
+        "root"
+    ],
+    "Lua.diagnostics.disable": [
+        "redundant-parameter",
+        "undefined-global"
+    ]
+}
