@@ -61,3 +61,4 @@ vscode go to settings search for ```"window.titleBarStyle": "native"``` and swit
 
 go to /etc/enviroment and paste ```FREETYPE_PROPERTIES="cff:no-stem-darkening=0 autofitter:no-stem-darkening=0"```
 
+
