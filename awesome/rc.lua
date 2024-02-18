@@ -38,3 +38,5 @@ require('config.rules')
 
 --autostart
 require('module.autostart')
+require('module.bling')
+require("module.brightness")

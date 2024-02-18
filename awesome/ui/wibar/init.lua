@@ -24,9 +24,9 @@ return function(s)
          -- Right widgets.
          {
             layout = wibox.layout.fixed.horizontal,
-            awful.widget.keyboardlayout(), -- Keyboard map indicator and switcher.
+            --awful.widget.keyboardlayout(), -- Keyboard map indicator and switcher.
             wibox.widget.systray(),
-            wibox.widget.textclock(), -- Create a textclock widget.
+            wibox.widget.textclock("  %A %B %e  %l:%M:%S %p ", 1),
             module.layoutbox(s)
          }
       }
