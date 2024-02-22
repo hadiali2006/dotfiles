@@ -19,8 +19,5 @@ super + a
 super + z
   rofi -show drun
 
-
-
-
-
-
+super + alt + End
+  systemctl suspend
