@@ -6,7 +6,7 @@ local gears     = require('gears')
 -- Themes define colors, icons, font and wallpapers.
 --beautiful.init(gears.filesystem.get_themes_dir() .. 'default/theme.lua')
 
-beautiful.init(gears.filesystem.get_configuration_dir() .. "/theme/custom/theme.lua")
+beautiful.init(gears.filesystem.get_configuration_dir() .. "/theme/themes/custom/theme.lua")
 
 --beautiful.init(gears.filesystem.get_configuration_dir() .. "/theme/gtk/theme.lua")
 --beautiful.init(gears.filesystem.get_configuration_dir() .. "/theme/sky/theme.lua")

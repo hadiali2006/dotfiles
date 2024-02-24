@@ -16,10 +16,11 @@ ruled.client.connect_signal('request::rules', function()
       }
    })
   ruled.client.append_rule({
-    id = 'max.fullscreen',
+    id = 'max',
     rule_any = {
       properties = {
-      }
+        border_width = 10 
+      },
     }
   })
 

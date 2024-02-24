@@ -38,3 +38,15 @@ end)
 -- An example of what's mentioned above. For more information, see:
 -- https://awesomewm.org/apidoc/utility_libraries/gears.wallpaper.html
 -- gears.wallpaper.maximized(beautiful.wallpaper)
+
+--remove borders if there is one window one the screen or if the layout is set to max
+screen.connect_signal("arrange", function (s)
+    for _, client in pairs(s.clients) do
+        if (client.screen.selected_tag.layout.name == "max" or #s.tiled_clients == 1) 
+	  and (not (client.floating or client.maximized)) then
+            client.border_width = 0
+        else
+            client.border_width = beautiful.border_width
+        end
+    end
+end)
