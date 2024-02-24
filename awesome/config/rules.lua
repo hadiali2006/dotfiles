@@ -15,15 +15,6 @@ ruled.client.connect_signal('request::rules', function()
          callback  = awful.client.setslave,
       }
    })
-  ruled.client.append_rule({
-    id = 'max',
-    rule_any = {
-      properties = {
-        border_width = 10 
-      },
-    }
-  })
-
    -- Floating clients.
    ruled.client.append_rule({
       id       = 'floating',
