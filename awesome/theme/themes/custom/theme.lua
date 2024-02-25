@@ -23,7 +23,7 @@ theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
 --theme.useless_gap         = dpi(0)
-theme.useless_gap         = 5
+theme.useless_gap         = dpi(5)
 theme.border_width        = dpi(1)
 theme.border_color_normal = "#000000"
 --theme.border_color_active = "#535d6c"
