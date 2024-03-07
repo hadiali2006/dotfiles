@@ -1,7 +1,7 @@
 local awful = require("awful")
 
+
 return function(s)
-    -- Create a tasklist widget
     return awful.widget.tasklist({
         screen  = s,
         filter  = awful.widget.tasklist.filter.currenttags,

@@ -5,9 +5,7 @@ local filesystem = require("gears.filesystem")
 return {
     run_on_start_up = {
         "picom --config " .. filesystem.get_configuration_dir() .. "assets/picom.conf",
-        "feh --bg-fill --random ~/wallpapers/",
         "unclutter",
-        "sxhkd",
 
 
         --[[ 

@@ -11,6 +11,49 @@ local gapIndex = 1
 
 awful.keyboard.append_global_keybindings({
     -- General Awesome keys.
+    awful.key({ mod.modkey, mod.alt}, "End", function ()
+        awful.spawn.with_shell("systemctl suspend")
+    end),
+    awful.key({ mod.modkey, }, "z", function ()
+        awful.spawn.with_shell("rofi -show drun")
+    end),
+    awful.key({ mod.modkey, }, "a", function ()
+        awful.spawn.with_shell("firefox")
+    end),
+    awful.key({ nil, }, "XF86AudioPlay", function ()
+        awful.spawn.with_shell("playerctl play-pause")
+    end),
+    awful.key({ nil, }, "XF86AudioNext", function ()
+        awful.spawn.with_shell("playerctl next")
+    end),
+    awful.key({ nil, }, "XF86AudioPrev", function ()
+        awful.spawn.with_shell("playerctl previous")
+    end),
+    awful.key({ nil, }, "XF86AudioRaiseVolume", function ()
+        awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
+        awful.spawn.with_shell("wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 1%+")
+        awesome.emit_signal("signal::volume", "inc")
+    end),
+    awful.key({ nil, }, "XF86AudioLowerVolume", function ()
+        awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
+        awful.spawn.with_shell("wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-")
+        awesome.emit_signal("signal::volume", "dec")
+    end),
+    awful.key({ nil, mod.ctrl }, "XF86AudioRaiseVolume", function ()
+        awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
+        awful.spawn.with_shell("wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+")
+        awesome.emit_signal("signal::volume::mod", "inc")
+    end),
+    awful.key({ nil, mod.ctrl }, "XF86AudioLowerVolume", function ()
+        awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
+        awful.spawn.with_shell("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")
+        awesome.emit_signal("signal::volume::mod", "dec")
+    end),
+    awful.key({ nil, }, "XF86AudioMute", function ()
+        awful.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
+        awesome.emit_signal("signal::volume", "mute")
+    end),
+
     awful.key({ modkey, }, "o", function()
         require("beautiful").useless_gap = gapTable[gapIndex]
         if gapIndex < 2 then
@@ -167,4 +210,3 @@ awful.keyboard.append_global_keybindings({
         end
     })
 })
--- vim: ts=4 sts=4 sw=4 et
