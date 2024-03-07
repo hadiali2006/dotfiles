@@ -5,48 +5,72 @@
 Pacman Pkgs:
 ```diff
 +(install)
-alacritty       
+alacritty
+wezterm
+qalculate-qt
+python
+ruby
 rustup
+lua
+npm
 xorg-xinit
+xorg-server
+xorg-xsel
 ly
 base-devel
 lf
 git
 fzf
-eza             
-unclutter        
+eza
+htop
+linux-headers
+man-db
+mpv
+unclutter
 fastfetch
+ffmpeg
+unzip
+gzip
+ripgrep
 neovim
 zsh
+fish
 wireplumber
 playerctl
-xbindkeys
+polybar
+nvidia
+nvidia-utils
 nvidia-settings
 firefox
 qbittorrent
-code
 noto-fonts
 noto-fonts-extra
 noto-fonts-cjk
-noto-fonts-emoji
 ttf-jetbrains-mono-nerd
 ttf-nerd-fonts-symbols
+ttf-nerd-fonts-symbols-common
+ttf-ms-fonts
 ```
-Build from src / clone:
+alternative install:
 ```
+ghcup
+qtile
+qtile-extras
+xmonad
+xmonad-contrib
 paru
 eww
 ```
 
 AUR Pkgs (paru):
 ```
-awesome-git
+awesome-luajit-git
 picom-git
-vscodium
+vscodium-bin
+webcord-bin
 intellij-idea-ultimate-edition-jre
 intellij-idea-ultimate-edition
 ```
-
 
 ```diff 
 @@  random fixes / config changes  @@

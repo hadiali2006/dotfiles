@@ -109,22 +109,24 @@ Kickstart Guide:
 
    NOTE: Look for lines like this
 
-    Throughout the file. These are for you, the reader to help understand what is happening.
+    Throughout the file. These are for you, the reader, to help understand what is happening.
     Feel free to delete them once you know what you're doing, but they should serve as a guide
     for when you are first encountering a few different constructs in your nvim config.
+
+If you experience any errors while trying to install kickstart, run `:checkhealth` for more info
 
 I hope you enjoy your Neovim journey,
 - TJ
 
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
---set tile for picom rules
 vim.opt.title = true
 vim.cmd 'set expandtab'
 vim.cmd 'set tabstop=4'
 vim.cmd 'set softtabstop=4'
 vim.cmd 'set shiftwidth=4'
-
+vim.cmd 'set termguicolors'
+vim.cmd 'set t_Co=256'
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -178,12 +180,7 @@ vim.opt.splitbelow = true
 --  See :help 'list'
 --  and :help 'listchars'
 vim.opt.list = true
-vim.opt.listchars = {
-  --tab = '» ',
-  tab = '  ',
-  trail = '·',
-  nbsp = '␣',
-}
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
@@ -230,10 +227,14 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- [[ Basic Autocommands ]]
+--  See :help lua-guide-autocommands
+
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
@@ -263,8 +264,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
 
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-
-  --'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -276,32 +276,25 @@ require('lazy').setup({
   --    require('Comment').setup({})
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',    opts = {} },
 
   -- Here is a more advanced example where we pass configuration
-  -- options to `conform.nvim`. This is equivalent to:
-  --    require('conform').setup({ ... })
+  -- options to `gitsigns.nvim`. This is equivalent to the following lua:
+  --    require('gitsigns').setup({ ... })
   --
-  -- See `:help conform` to understand what the configuration keys do
-  --{ -- Autoformat
-  --  'stevearc/conform.nvim',
-  --  opts = {
-  --    notify_on_error = false,
-  --    format_on_save = {
-  --      timeout_ms = 500,
-  --      lsp_fallback = true,
-  --    },
-  --    formatters_by_ft = {
-  --      lua = { 'stylua' },
-  --      -- Conform can also run multiple formatters sequentially
-  --      -- python = { "isort", "black" },
-  --      --
-  --      -- You can use a sub-list to tell conform to run *until* a formatter
-  --      -- is found.
-  --      -- javascript = { { "prettierd", "prettier" } },
-  --    },
-  --  },
-  --},
+  -- See `:help gitsigns` to understand what the configuration keys do
+  { -- Adds git related signs to the gutter, as well as utilities for managing changes
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      signs = {
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+      },
+    },
+  },
 
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
   --
@@ -318,7 +311,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VeryLazy', -- Sets the loading event to 'VeryLazy'
     config = function() -- This is the function that runs, AFTER loading
@@ -444,9 +437,7 @@ require('lazy').setup({
 
       -- Shortcut for searching your neovim configuration files
       vim.keymap.set('n', '<leader>sn', function()
-        builtin.find_files {
-          cwd = vim.fn.stdpath 'config',
-        }
+        builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
     end,
   },
@@ -537,16 +528,11 @@ require('lazy').setup({
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
-          map('<leader>ca', function()
-            vim.lsp.buf.code_action { context = { only = { 'quickfix', 'refactor', 'source' } } }
-          end, '[C]ode [A]ction')
+          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
-
-          -- Show the signature of the function you're currently completing.
-          map('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header
@@ -557,15 +543,18 @@ require('lazy').setup({
           --    See `:help CursorHold` for information about when this is executed
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
-          vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-            buffer = event.buf,
-            callback = vim.lsp.buf.document_highlight,
-          })
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.server_capabilities.documentHighlightProvider then
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+              buffer = event.buf,
+              callback = vim.lsp.buf.document_highlight,
+            })
 
-          vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-            buffer = event.buf,
-            callback = vim.lsp.buf.clear_references,
-          })
+            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+              buffer = event.buf,
+              callback = vim.lsp.buf.clear_references,
+            })
+          end
         end,
       })
 
@@ -592,12 +581,12 @@ require('lazy').setup({
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
-        -- If you use something like typescript, where the tooling is as bad as the language,
-        -- then you might need to install and configure something like this:
+        -- Some languages (like typescript) have entire language plugins that can be useful:
         --    https://github.com/pmizio/typescript-tools.nvim
         --
-        -- If you only have simple needs for typescript, then you can probably just use tsserver
+        -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
+        --
 
         lua_ls = {
           -- cmd = {...},
@@ -624,13 +613,6 @@ require('lazy').setup({
         },
       }
 
-      -- You can add other tools here that you want Mason to install
-      -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format lua code
-      })
-
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -638,7 +620,15 @@ require('lazy').setup({
       --
       --  You can press `g?` for help in this menu
       require('mason').setup()
+
+      -- You can add other tools here that you want Mason to install
+      -- for you, so that they are available from within Neovim.
+      local ensure_installed = vim.tbl_keys(servers or {})
+      vim.list_extend(ensure_installed, {
+        'stylua', -- Used to format lua code
+      })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
@@ -657,6 +647,26 @@ require('lazy').setup({
       }
     end,
   },
+
+  -- { -- Autoformat
+  --   'stevearc/conform.nvim',
+  --   opts = {
+  --     notify_on_error = false,
+  --     format_on_save = {
+  --       timeout_ms = 500,
+  --       lsp_fallback = true,
+  --     },
+  --     formatters_by_ft = {
+  --       lua = { 'stylua' },
+  --       -- Conform can also run multiple formatters sequentially
+  --       -- python = { "isort", "black" },
+  --       --
+  --       -- You can use a sub-list to tell conform to run *until* a formatter
+  --       -- is found.
+  --       -- javascript = { { "prettierd", "prettier" } },
+  --     },
+  --   },
+  -- },
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -751,54 +761,6 @@ require('lazy').setup({
     end,
   },
 
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      -- See `:help gitsigns.txt`
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
-  },
-
-  {
-    'navarasu/onedark.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      --vim.cmd.colorscheme 'onedark'
-      --vim.cmd.hi 'Comment gui=none'
-    end,
-  },
-  {
-    'Shatur/neovim-ayu',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'ayu'
-      vim.cmd.hi 'Comment gui=none'
-    end,
-  },
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`
-    'folke/tokyonight.nvim',
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
-    config = function()
-      -- Load the colorscheme here
-      -- vim.cmd.colorscheme 'tokyonight-night'
-
-      -- You can configure highlights by doing something like
-      -- vim.cmd.hi 'Comment gui=none'
-    end,
-  },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
@@ -824,11 +786,10 @@ require('lazy').setup({
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
-      require('mini.statusline').setup()
+      --require('mini.statusline').setup()
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
-
       require("mini.align").setup()
     end,
   },
@@ -841,8 +802,8 @@ require('lazy').setup({
 
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'c', 'lua', 'vim', 'vimdoc' },
-        -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
+        ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
+        -- Autoinstall languages that are not installed
         auto_install = true,
         highlight = { enable = true },
         indent = { enable = true },
@@ -856,25 +817,33 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
-
+  -- {
+  --   "chadcat7/prism",
+  --   events = {"UIEnter"},
+  --   config = function()
+  --     require("prism"):setup({
+  --       reset = false,
+  --     })
+  --   end
+  -- },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- put them in the right spots if you want.
 
-  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional plugins for kickstart
-  --       These are some example plugins that I've included in the kickstart repository.
-  --       Uncomment any of the lines below to enable them.
+  -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for kickstart
+  --
+  --  Here are some example plugins that I've included in the kickstart repository.
+  --  Uncomment any of the lines below to enable them (you will need to restart nvim).
+  --
   require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
-  require 'custom.none-ls'
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
-  --    up-to-date with whatever is in the kickstart repo.
-  --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+  --    This is the easiest way to modularize your config.
   --
-  --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+  --    For additional information see: :help lazy.nvim-lazy.nvim-structuring-your-plugins
+  { import = 'custom.plugins' },
 }, {})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
