@@ -10,6 +10,7 @@ end
 
 client.connect_signal("request::default_keybindings", function()
     awful.keyboard.append_client_keybindings({
+        awful.key({ modkey, "Shift" }, "t", awful.titlebar.toggle),
         -- Client state management.
         awful.key({ modkey }, "f", function(c)
             c.fullscreen = not c.fullscreen
@@ -134,4 +135,3 @@ client.connect_signal("request::default_keybindings", function()
         end, { description = "swap with up client", group = "client" }),
     })
 end)
--- vim: ts=4 sts=4 sw=4 et

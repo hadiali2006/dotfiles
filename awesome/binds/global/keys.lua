@@ -31,27 +31,32 @@ awful.keyboard.append_global_keybindings({
     end),
     awful.key({ nil, }, "XF86AudioRaiseVolume", function ()
         awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
-        awful.spawn.with_shell("wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 1%+")
-        awesome.emit_signal("signal::volume", "inc")
+        awful.spawn.with_shell("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%+")
+        awesome.emit_signal("volume::increase", "inc", 1)
     end),
     awful.key({ nil, }, "XF86AudioLowerVolume", function ()
         awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
         awful.spawn.with_shell("wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-")
-        awesome.emit_signal("signal::volume", "dec")
+        awesome.emit_signal("volume::decrease", "dec", 1)
     end),
     awful.key({ nil, mod.ctrl }, "XF86AudioRaiseVolume", function ()
         awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
-        awful.spawn.with_shell("wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+")
-        awesome.emit_signal("signal::volume::mod", "inc")
+        awful.spawn.with_shell("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+")
+        awesome.emit_signal("volume::increase", "inc", 5)
     end),
     awful.key({ nil, mod.ctrl }, "XF86AudioLowerVolume", function ()
         awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
         awful.spawn.with_shell("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-")
-        awesome.emit_signal("signal::volume::mod", "dec")
+        awesome.emit_signal("volume::decrease", "dec", 5)
     end),
     awful.key({ nil, }, "XF86AudioMute", function ()
-        awful.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
-        awesome.emit_signal("signal::volume", "mute")
+        awful.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", false)
+        awesome.emit_signal("volume::togglemute")
+    end),
+
+    awful.key({ nil, mod.ctrl }, "XF86AudioMute", function ()
+        awful.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", false)
+        awesome.emit_signal("volume::togglemute")
     end),
 
     awful.key({ modkey, }, "o", function()

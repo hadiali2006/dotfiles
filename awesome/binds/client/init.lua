@@ -1,5 +1,4 @@
--- Returns all client mouse and keybinds.
 return {
-   keys  = require(... .. ".keys"),
-   mouse = require(... .. ".mouse"),
+    keys  = require(... .. ".keys"),
+    mouse = require(... .. ".mouse"),
 }

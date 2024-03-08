@@ -1,4 +1,5 @@
 local awful = require("awful")
+-- local helpers = require("helpers")
 local wibox = require("wibox")
 
 local module = require(... .. ".module")
@@ -24,9 +25,14 @@ return function(s)
             {
                 layout = wibox.layout.fixed.horizontal,
                 module.systray(),
-                wibox.widget.textbox(" 󰋋 "),
+                -- wibox.widget{
+                --     widget = wibox.widget.textbox(),
+                --     markup = helpers.misc.colorize({
+                --         text = "g",
+                --         fg = "#f45434",
+                --     })
+                -- },
                 module.vol(),
-                wibox.widget.textbox("%"),
                 wibox.widget.textclock(" %r %A %B %d ", 1),
                 -- module.cal(),
                 module.layoutbox(s),
