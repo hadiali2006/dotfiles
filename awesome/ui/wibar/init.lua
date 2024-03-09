@@ -33,7 +33,8 @@ return function(s)
                 --     })
                 -- },
                 module.vol(),
-                wibox.widget.textclock(" %r %A %B %d ", 1),
+                module.time(),
+
                 -- module.cal(),
                 module.layoutbox(s),
             }
