@@ -2,7 +2,6 @@
 # ~/.bashrc
 #
 
-# If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
 alias ls='eza --color=auto'
@@ -12,8 +11,11 @@ alias oldnv='nvim'
 alias nv='NVIM_APPNAME="nvim-kickstart" nvim'
 alias nvhs='NVIM_APPNAME="nvim-hs" nvim'
 alias gs='git status'
-#PS1='[\u@\h \W]\$ '
+alias vol='wpctl get-volume @DEFAULT_AUDIO_SINK@'
+set -o vi
 PS1='\w \\$ '
 export EDITOR='nvim'
 
 [ -f "/home/hadi/.ghcup/env" ] && source "/home/hadi/.ghcup/env" # ghcup-env
+export PATH=~/.npm-global/bin:$PATH 
+export PATH=~/.local/bin:$PATH

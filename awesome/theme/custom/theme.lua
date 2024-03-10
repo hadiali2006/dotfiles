@@ -8,7 +8,7 @@ local themes_path = gfs.get_configuration_dir() .. "/theme/custom/"
 
 local theme = {}
 
-theme.font          = "Jetbrains Mono Nerd Font Regular 12"
+theme.font          = "Jetbrains Mono Nerd Font Regular 13"
 -- theme.font          = "cozette 10"
 
 theme.bg_normal     = "#222222"
@@ -26,8 +26,8 @@ theme.useless_gap         = dpi(5)
 theme.border_width        = dpi(2)
 -- theme.border_color_normal = "#000000"
 --theme.border_color_active = "#535d6c"
-theme.border_color_normal = "#535d6c"
-theme.border_color_active = "#ffffff"
+theme.border_color_normal = "#00000000"
+theme.border_color_active = "#535d6c00"
 theme.border_color_marked = "#91231c"
 
 -- There are other variable sets

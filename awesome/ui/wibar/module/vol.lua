@@ -3,17 +3,18 @@ local wibox = require("wibox")
 
 local volWidget = wibox.widget.textbox()
 
-local decoIcon         = " 󰋋 "
-local muteIcon         = "x"
+local decoIcon         = " 󰕾 "
+local constdecoIcon    = " 󰕾 "
+local muteIcon         = " 󰖁 "
 local constPercentIcon = "% "
 local percentIcon      = "% "
 local textcolor        = "#ffffff"
-local bgcolor          = "#223fff"
+local bgcolor          = "#2f807f"
 
 local function getVolume(callback)
     awful.spawn.easy_async("wpctl get-volume @DEFAULT_AUDIO_SINK@",
         function (stdout)
-            local volume = math.floor(stdout:match("(%d%.%d+)") * 100)
+            local volume  = math.floor(stdout:match("Volume:%s+(%d+.%d+)") * 100 + 0.5)
             local isMuted = stdout:match("MUTED")
             callback(volume, isMuted)
         end)
@@ -33,25 +34,28 @@ end
 
 local function setVolumeFromShell(action, mod, volume)
     if action == "inc" then
-        setText(volume + mod)
+        if(volume + mod) >= 100 then
+            setText(100)
+        else
+            setText(volume + mod)
+        end
     elseif action == "dec" then
         if (volume - mod) <= 0 then
             setText(0)
         else
             setText(volume - mod)
         end
-    elseif action == "mute" then
-        setText(volume)
     end
 end
 
 awesome.connect_signal("volume::increase", function (action, mod)
     local parsedVolume = getVolumeFromHTML(volWidget:get_markup())
-    if parsedVolume == "x" then
+    if parsedVolume == muteIcon then
         getVolume(function (volume)
-            setVolumeFromShell(action, mod, tostring(volume))
+            setVolumeFromShell(action, mod, volume)
         end)
         percentIcon = constPercentIcon
+        decoIcon    = constdecoIcon
     else
         if(parsedVolume + mod) >= 100 then
             setText(100)
@@ -63,11 +67,12 @@ end)
 
 awesome.connect_signal("volume::decrease", function (action, mod)
     local parsedVolume = getVolumeFromHTML(volWidget:get_markup())
-    if parsedVolume == "x" then
+    if parsedVolume == muteIcon then
         getVolume(function (volume)
-            setVolumeFromShell(action, mod, tostring(volume))
+            setVolumeFromShell(action, mod, volume)
         end)
         percentIcon = constPercentIcon
+        decoIcon    = constdecoIcon
     else
         if (parsedVolume - mod) <= 0 then
             setText(0)
@@ -79,14 +84,16 @@ end)
 
 awesome.connect_signal("volume::togglemute", function ()
     local parsedVolume = getVolumeFromHTML(volWidget:get_markup())
-    if parsedVolume == "x" then
+    if parsedVolume == muteIcon then
         getVolume(function (volume)
             setText(volume)
         end)
+        decoIcon    = constdecoIcon
         percentIcon = constPercentIcon
     else
-        percentIcon = " "
-        setText("x")
+        percentIcon = ""
+        decoIcon    = ""
+        setText(muteIcon)
     end
 end)
 
@@ -104,7 +111,8 @@ volWidget.buttons = {
 return function ()
     getVolume(function (volume, isMuted)
         if isMuted then
-            percentIcon = " "
+            percentIcon = ""
+            decoIcon    = ""
             volWidget:set_markup_silently(string.format(
                 "<span color='%s' bgcolor='%s'>%s%s%s</span>",
                 textcolor, bgcolor, decoIcon, muteIcon, percentIcon))

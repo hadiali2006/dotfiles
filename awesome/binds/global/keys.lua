@@ -1,3 +1,15 @@
+local naughty = require("naughty")
+
+-- Function to create and show a notification
+local function notif(title, message)
+    naughty.notify({
+        title = title,
+        text = message,
+        timeout = 1,
+        position = "top_right"  -- Position of the notification
+    })
+end
+
 local awful    = require("awful")
 
 local mod      = require("binds.mod")
@@ -32,11 +44,13 @@ awful.keyboard.append_global_keybindings({
     awful.key({ nil, }, "XF86AudioRaiseVolume", function ()
         awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
         awful.spawn.with_shell("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 1%+")
+        -- notif("bind raise")
         awesome.emit_signal("volume::increase", "inc", 1)
     end),
     awful.key({ nil, }, "XF86AudioLowerVolume", function ()
         awful.spawn.with_shell("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0")
         awful.spawn.with_shell("wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-")
+        -- notif("bind lower")
         awesome.emit_signal("volume::decrease", "dec", 1)
     end),
     awful.key({ nil, mod.ctrl }, "XF86AudioRaiseVolume", function ()
