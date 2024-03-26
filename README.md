@@ -2,8 +2,8 @@
 
 ## Window Managers Featured:
 
-| WM | Config |
+| WM Repo | My Config |
 | ------ | ------ |
-| [Xmonad](https://github.com/xmonad/xmonad) | [Config](https://github.com/hadiali2006/dotfiles/tree/main/xmonad) |
-| [QTile](https://github.com/qtile/qtile) | [Config](https://github.com/hadiali2006/dotfiles/tree/main/qtile) |
 | [AwesomeWM](https://github.com/AwesomeWM/awesome) | [Config](https://github.com/hadiali2006/dotfiles/tree/main/awesome) |
+| [QTile](https://github.com/qtile/qtile) | [Config](https://github.com/hadiali2006/dotfiles/tree/main/qtile) |
+| [Xmonad](https://github.com/xmonad/xmonad) | [Config](https://github.com/hadiali2006/dotfiles/tree/main/xmonad) |

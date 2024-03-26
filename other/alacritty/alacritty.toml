@@ -1,59 +1,96 @@
-[colors.bright]
-black = "0x7f8c8d"
-blue = "0x3daee9"
-cyan = "0x16a085"
-green = "0x1cdc9a"
-magenta = "0x8e44ad"
-red = "0xc0392b"
-white = "0xffffff"
-yellow = "0xfdbc4b"
-
-[colors.dim]
-black = "0x31363b"
-blue = "0x1b668f"
-cyan = "0x186c60"
-green = "0x17a262"
-magenta = "0x614a73"
-red = "0x783228"
-white = "0x63686d"
-yellow = "0xb65619"
+[colors.primary]
+foreground = "#c5c8c6"
+background = "#1d1f21"
 
 [colors.normal]
-black = "0x232627"
-blue = "0x1d99f3"
-cyan = "0x1abc9c"
-green = "0x11d116"
-magenta = "0x9b59b6"
-red = "0xed1515"
-white = "0xfcfcfc"
-yellow = "0xf67400"
+black = "#1d1f21"
+red = "#cc6666"
+green = "#b5bd68"
+yellow = "#f0c674"
+blue = "#81a2be"
+magenta = "#b294bb"
+cyan = "#8abeb7"
+white = "#c5c8c6"
 
-[colors.primary]
-background = "0x232627"
-bright_foreground = "0xffffff"
-dim_foreground = "0xeff0f1"
-foreground = "0xfcfcfc"
+[colors.bright]
+black = "#666666"
+red = "#d54e53"
+green = "#b9ca4a"
+yellow = "#e7c547"
+blue = "#7aa6da"
+magenta = "#c397d8"
+cyan = "#70c0b1"
+white = "#eaeaea"
 
+[colors.dim]
+black = "#131415"
+red = "#864343"
+green = "#777c44"
+yellow = "#9e824c"
+blue = "#556a7d"
+magenta = "#75617b"
+cyan = "#5b7d78"
+white = "#828482"
+
+# [colors.bright]
+# black             = "#7f8c8d"
+# blue              = "#3daee9"
+# cyan              = "#16a085"
+# green             = "#1cdc9a"
+# magenta           = "#8e44ad"
+# red               = "#c0392b"
+# white             = "#ffffff"
+# yellow            = "#fdbc4b"
+#
+# [colors.dim]
+# black             = "#31363b"
+# blue              = "#1b668f"
+# cyan              = "#186c60"
+# green             = "#17a262"
+# magenta           = "#614a73"
+# red               = "#783228"
+# white             = "#63686d"
+# yellow            = "#b65619"
+#
+# [colors.normal]
+# black             = "#232627"
+# blue              = "#1d99f3"
+# cyan              = "#1abc9c"
+# green             = "#11d116"
+# magenta           = "#9b59b6"
+# red               = "#ed1515"
+# white             = "#fcfcfc"
+# yellow            = "#f67400"
+#
+# [colors.primary]
+# background        = "#232627"
+# bright_foreground = "#ffffff"
+# dim_foreground    = "#eff0f1"
+# foreground        = "#fcfcfc"
+#
 [window]
-padding = {x = 15, y = 15}
-dynamic_padding = true
+padding         = {x = 15, y = 15}
+dynamic_padding = false
+opacity         = 0.75
+
+# opacity         = 1
 #dynamic_title = true
 
 [font]
-size = 13
+size = 14
 
 [font.bold]
 family = "JetBrains Mono Nerd Font"
-style = "Bold"
+style  = "Bold"
 
 [font.bold_italic]
 family = "JetBrains Mono Nerd Font"
-style = "Bold Italic"
+style  = "Bold Italic"
 
 [font.italic]
 family = "JetBrains Mono Nerd Font"
-style = "Italic"
+style  = "Italic"
 
 [font.normal]
 family = "JetBrains Mono Nerd Font"
-style = "Regular"
+style  = "Regular"

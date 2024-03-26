@@ -1,22 +1,22 @@
 configuration {
-  display-drun: "Applications:";
+  display-drun: " ";
   display-window: "Windows:";
   drun-display-format: "{name}";
-  font: "JetBrainsMono Nerd Font Medium 10";
+  font: "JetBrainsMono Nerd Font Medium 14";
   modi: "window,run,drun";
 }
 
 @theme "/dev/null"
 
 * {
-  bg: #232627;
-  bg-alt: #31363b;
-  bg-selected: #545e5f;
+  bg: #23262755;
+  bg-alt: #31363b88;
+  bg-selected: #212121aa;
 
   fg: #fcfcfc;
   fg-alt: #eff0f1;
 
-  
+
   border: 0;
   margin: 0;
   padding: 0;
@@ -24,7 +24,8 @@ configuration {
 }
 
 window {
-  width: 30%;
+  // width: 14.2%;
+  width: 19.02%;
   background-color: @bg;
 }
 
@@ -66,7 +67,7 @@ inputbar {
 listview {
   background-color: @bg;
   columns: 1;
-  lines: 10;
+  lines: 4;
 }
 
 mainbox {
