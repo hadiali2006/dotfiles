@@ -141,7 +141,7 @@ local client_tiling_window_binds = {
         end,
         {
             description = "move to screen",
-            group = "client" 
+            group = "client"
         }
     ),
     awful.key(
@@ -431,7 +431,6 @@ local client_focus = {
 --         }
 --     ),
 -- }
-
 client.connect_signal("request::default_keybindings", function()
     awful.keyboard.append_client_keybindings(client_state_binds)
     awful.keyboard.append_client_keybindings(client_tiling_window_binds)
@@ -439,7 +438,4 @@ client.connect_signal("request::default_keybindings", function()
     awful.keyboard.append_client_keybindings(client_resize_decrease)
     awful.keyboard.append_client_keybindings(client_move_floating)
     awful.keyboard.append_client_keybindings(client_focus)
-    awful.keyboard.append_client_keybindings({
-
-    })
 end)

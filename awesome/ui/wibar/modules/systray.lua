@@ -3,25 +3,25 @@ local awful     = require("awful")
 local gears     = require("gears")
 local beautiful = require("beautiful")
 
+local theme = beautiful.modules.systray
 local dpi = beautiful.xresources.apply_dpi
 
-local SYSTRAY_ICON       = " 󰗘 "
+local SYSTRAY_ICON       = theme.icon.menu_svg
 
-local bg_color_markup     = beautiful.widget.bg_markup
-local fg_color_markup     = beautiful.widget.fg_markup
+local bg_color_markup     = theme.widget.markup.background
+local fg_color_markup     = theme.widget.markup.foreground
 
-local bg_color_widget     = beautiful.widget.bg_widget
-local fg_color_widget     = beautiful.widget.fg_widget
-local border_color_widget = beautiful.widget.border_widget
-local border_width_widget = beautiful.widget.border_size
+local bg_color_widget     = theme.widget.background_container.background
+local fg_color_widget     = theme.widget.background_container.foreground
+local border_color_widget = theme.widget.background_container.border_color
+local border_width_widget = theme.widget.background_container.border_width
 
-local border_color_popup = beautiful.widget.border_popup
+local border_color_popup  = theme.popup.border_color
+local border_width_popup  = theme.popup.border_width
 
-local internal_textbox = {
-    widget = wibox.widget.textbox(),
-    markup = string.format(
-        "<span color='%s' bgcolor='%s' bgalpha='65535'>%s</span>",
-        fg_color_markup, bg_color_markup, SYSTRAY_ICON),
+local internal_icon_imagebox = {
+    widget = wibox.widget.imagebox(),
+    image = SYSTRAY_ICON,
 }
 
 local internal_systray = {
@@ -29,28 +29,45 @@ local internal_systray = {
 }
 
 local container_widget_table = {
-    internal_textbox,
-    widget       = wibox.container.background,
-    bg           = bg_color_widget,
-    fg           = fg_color_widget,
-    border_width = border_width_widget,
-    border_color = border_color_widget,
+    {
+        internal_icon_imagebox,
+        widget       = wibox.container.background,
+        bg           = bg_color_widget,
+        fg           = fg_color_widget,
+        border_color = border_color_widget,
+        border_width = border_width_widget,
+    },
+    widget = wibox.container.margin,
+    margins = {
+        top    = 5,
+        bottom = 5,
+        right  = 5,
+        left   = 5,
+    },
 }
 
-
-local btn_widget = internal_textbox.widget
+local btn_widget = internal_icon_imagebox.widget
 local systray_widget = internal_systray.widget
 local full_systray_widget = wibox.widget(container_widget_table)
 
 local pop_tray = awful.popup {
-    widget = systray_widget,
+    widget = {
+        internal_systray,
+        widget = wibox.container.margin,
+        margins = {
+            top    = 5,
+            bottom = 5,
+            right  = 5,
+            left   = 5,
+        },
+    },
     hide_on_right_click = true,
     border_color = border_color_popup,
-    border_width = 5,
-    visible = false,
+    border_width = border_width_popup,
     ontop = true,
-    x = 10 + 5,
-    y = 33 + 15,
+    visible = false,
+    x = 10,
+    y = 33 + 5,
 }
 
 btn_widget.buttons = {

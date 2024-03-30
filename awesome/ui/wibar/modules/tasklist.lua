@@ -1,10 +1,47 @@
 local awful = require("awful")
+local gears = require("gears")
+local wibox = require("wibox")
 
 
 return function(s)
     return awful.widget.tasklist({
         screen  = s,
         filter  = awful.widget.tasklist.filter.currenttags,
+        layout  = {
+            spacing_widget = {
+                {
+                    forced_width  = 5,
+                    forced_height = 24,
+                    thickness     = 1,
+                    widget        = wibox.widget.separator
+                },
+                valign = "center",
+                halign = "center",
+                widget = wibox.container.place,
+            },
+            spacing = 1,
+            layout  = wibox.layout.fixed.horizontal
+        },
+        widget_template = {
+            {
+                wibox.widget.base.make_widget(),
+                forced_height = 3,
+                id            = "background_role",
+                widget        = wibox.container.background,
+            },
+            {
+                {
+                    awful.widget.clienticon,
+                    valign = "center",
+                    halign = "center",
+                    widget  = wibox.container.place
+                },
+                margins = 4,
+                widget  = wibox.container.margin
+            },
+            nil,
+            layout = wibox.layout.align.vertical,
+        },
         buttons = {
             -- Left-clicking a client indicator minimizes it if it's unminimized, or unminimizes
             -- it if it"s minimized.

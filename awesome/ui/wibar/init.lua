@@ -1,20 +1,46 @@
-local naughty = require("naughty")
-
--- Function to create and show a notification
-local function notif(title, message)
-    naughty.notify({
-        title = title,
-        text = message,
-        timeout = 1,
-        position = "top_right"  -- Position of the notification
-    })
-end
-
 local awful = require("awful")
--- local helpers = require("helpers")
 local wibox = require("wibox")
 
 local module = require(... .. ".modules")
+
+local left_widgets = function (s)
+    return {
+        {
+        wibox.widget.textbox(" "),
+        -- module.launcher(),
+        module.systray(),
+        -- module.redshift(),
+        -- module.cal(),
+        module.volume(),
+        module.brightness(),
+        module.taglist(s),
+        spacing = 15,
+        spacing_widget = wibox.widget.separator,
+        layout = wibox.layout.fixed.horizontal,
+        },
+        s.mypromptbox,
+        layout = wibox.layout.fixed.horizontal,
+    }
+
+end
+
+local middle_widget = function(s)
+    return {
+        widget = module.tasklist(s),
+    }
+end
+
+local right_widgets = function(s)
+    return {
+        module.time(),
+        module.date(),
+        module.layoutbox(s),
+        wibox.widget.textbox(" "),
+        spacing = 15,
+        spacing_widget = wibox.widget.separator,
+        layout = wibox.layout.fixed.horizontal,
+    }
+end
 
 return function(s)
     s.mypromptbox = awful.widget.prompt()
@@ -24,29 +50,9 @@ return function(s)
         screen   = s,
         widget   = {
             layout = wibox.layout.align.horizontal,
-            -- Left widgets.
-            {
-                layout = wibox.layout.fixed.horizontal,
-                module.systray(),
-                -- module.launcher(),
-                module.taglist(s),
-                s.mypromptbox
-            },
-            -- Middle widgets.
-            module.tasklist(s),
-            -- Right widgets.
-            {
-                layout = wibox.layout.fixed.horizontal,
-                -- module.redshift(),
-                module.brightness(),
-                module.volume(),
-                module.time(),
-                module.date(),
-                module.layoutbox(s),
-
-
-            }
+            left_widgets(s),
+            middle_widget(s),
+            right_widgets(s)
         }
     })
-    -- notif(tostring(s.mywibox.height))
 end

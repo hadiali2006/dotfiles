@@ -146,16 +146,57 @@ theme.awesome_icon = theme_assets.awesome_icon(
 theme.icon_theme = nil
 
 -- Set different colors for urgent notifications.
-rnotification.connect_signal('request::rules', function()
+rnotification.connect_signal("request::rules", function()
     rnotification.append_rule {
-        rule       = { urgency = 'critical' },
-        properties = { bg = '#ff0000', fg = '#ffffff' }
+        rule       = { urgency = "critical" },
+        properties = { bg = "#ff0000", fg = "#ffffff" }
     }
 end)
 
+local colors_2 = {
+
+    bg         = "#17181C",
+    mid_bg     = "#1E1F24",
+    light_bg   = "#26272B",
+    dark_grey  = "#333438",
+    light_grey = "#8F9093",
+    dark_fg    = "#B0B1B4",
+    mid_fg     = "#CBCCCE",
+    fg         = "#E4E5E7",
+    pink       = "#FA3867",
+    orange     = "#F3872F",
+    gold       = "#FEBD16",
+    lime       = "#3FD43B",
+    turquoise  = "#47E7CE",
+    blue       = "#53ADE1",
+    violet     = "#AD60FF",
+    red        = "#FC3F2C",
+    -- ansi = {
+    --     "#17181C",
+    --     "#FA3867",
+    --     "#3FD43B",
+    --     "#FEBD16",
+    --     "#53ADE1",
+    --     "#AD60FF",
+    --     "#47E7CE",
+    --     "#B0B1B4"
+    -- },
+    -- brights = {
+    --     "#26272B",
+    --     "#FA3867",
+    --     "#3FD43B",
+    --     "#FEBD16",
+    --     "#53ADE1",
+    --     "#AD60FF",
+    --     "#47E7CE",
+    --     "#E4E5E7"
+    -- }
+}
+
 local colors = {
     bright = {
-        black   = "#7f8c8d",
+        -- black   = "#7f8c8d",
+        black   = "#17181C",
         blue    = "#3daee9",
         cyan    = "#16a085",
         green   = "#1cdc9a",
@@ -185,17 +226,239 @@ local colors = {
         yellow  = "#b65619",
     },
 }
-theme.widget = {}
 
-theme.widget.bg_markup = colors.bright.black
-theme.widget.fg_markup = colors.bright.white
-theme.widget.alpha_markup = 65535
+theme.MAX_ALPHA = 65535
+theme.modules = {}
 
-theme.widget.bg_widget = colors.bright.black
-theme.widget.fg_widget = colors.bright.white
-theme.widget.border_widget = colors.dim.black
-theme.widget.border_size = 2
+theme.modules.date = {
+    widget = {
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 1,
+        },
+    },
+    icon = {
+        calendar_svg = themes_path .. "icons/calendar.svg",
+        calendar = " 󰃭 ",
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 2,
+        },
+    },
+    popup = {
+        border_color = colors.bright.white,
+        border_width  = 1,
+    },
+}
 
-theme.widget.border_popup = colors.bright.white .. opacity_append
+theme.modules.time = {
+    widget = {
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 1,
+        },
+    },
+    icon = {
+        clock_svg = themes_path .. "icons/clock.svg",
+        clock = "  ",
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 2,
+        },
+    }
+}
 
+theme.modules.volume = {
+    widget = {
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 1,
+        },
+    },
+    icon = {
+        volume_svg = themes_path .. "icons/volume_2.svg",
+        muted_svg = themes_path .. "icons/muted_2.svg",
+        volume  = " 󰕾 ",
+        mute    = " 󰖁 ",
+        percent = "%",
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.red,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.red,
+            border_color = colors.bright.white,
+            border_width  = 2,
+        },
+    }
+}
+
+theme.modules.ddcutil = {
+    widget = {
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 1,
+        },
+    },
+    icon = {
+        brightness_svg = themes_path .. "icons/ddcutil_brightness_3.svg",
+        brightness = " 󰛩 ",
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 2,
+        },
+    }
+}
+
+theme.modules.redshift = {
+    widget = {
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 1,
+        },
+    },
+    icon = {
+        temperature = "  ",
+        daytime     = "  ",
+        night       = "  ",
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 2,
+        },
+    }
+}
+
+theme.modules.systray = {
+    widget = {
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 1,
+        },
+    },
+    icon = {
+        menu_svg = themes_path .. "icons/menu.svg",
+        markup = {
+            background = colors.bright.black,
+            foreground = colors.bright.white,
+            alpha      = theme.MAX_ALPHA,
+        },
+        background_container = {
+            background   = colors.bright.black,
+            foreground   = colors.bright.white,
+            border_color = colors.bright.white,
+            border_width  = 2,
+        },
+    },
+    popup = {
+        border_color = colors.bright.white,
+        border_width  = 1,
+    }
+}
+
+theme.modules.layoutbox = {
+    background   = colors.bright.black,
+    foreground   = colors.bright.white,
+    border_color = colors.bright.white,
+    border_width  = 1,
+}
+
+--
+-- theme.widget = {}
+-- theme.widget.icon = {}
+-- theme.widget.bg_markup           = colors.bright.black
+-- theme.widget.fg_markup           = colors.bright.white
+-- theme.widget.alpha_markup        = 65535
+--
+-- theme.widget.bg_widget     = colors.bright.black
+-- theme.widget.fg_widget     = colors.bright.white
+-- theme.widget.border_widget = colors.bright.white
+-- theme.widget.border_width   = 2
+--
+-- theme.widget.icon.bg_markup      = colors.bright.black
+-- theme.widget.icon.fg_icon_markup = colors.bright.white
+-- theme.widget.icon.alpha_markup   = 65535
+--
+-- theme.widget.icon.bg_widget     = colors.bright.black
+-- theme.widget.icon.fg_widget     = colors.bright.white
+-- theme.widget.icon.border_widget = colors.dim.black
+-- theme.widget.icon.border_width   = 2
+--
+-- theme.widget.border_popup = colors.bright.white .. opacity_append
+
+theme.systray_icon_spacing = 5
+
+theme.thin_space = " "
+    -- return " "
 return theme

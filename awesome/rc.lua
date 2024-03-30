@@ -25,3 +25,5 @@ require("signal")
 require("binds")
 require("config.rules")
 require("module.autostart")
+
+require("config.scratchpad")

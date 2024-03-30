@@ -34,7 +34,7 @@ awful.key.keygroup.HJKL = "hjkl"
 
 local anim_y = rubato.timed {
     pos = 1090,
-    rate = 60,
+    rate = 144,
     easing = rubato.quadratic,
     intro = 0.1,
     duration = 0.3,
@@ -43,7 +43,7 @@ local anim_y = rubato.timed {
 
 local anim_x = rubato.timed {
     pos = -970,
-    rate = 60,
+    rate = 144,
     easing = rubato.quadratic,
     intro = 0.1,
     duration = 0.3,
@@ -71,7 +71,9 @@ local term_scratch = bling.module.scratchpad {
 
 }
 local cmd_binds = {}
+local scratchpad_up = false
 awful.keyboard.append_global_keybindings({
+
     awful.key(
         { modkey, },
         "w",
@@ -82,9 +84,16 @@ awful.keyboard.append_global_keybindings({
 
     awful.key(
         { modkey, },
+        "v",
+        function()
+            term_scratch:turn_off()
+        end
+    ),
+    awful.key(
+        { modkey, },
         "g",
         function()
-            term_scratch:toggle()
+            term_scratch:turn_on()
         end
     ),
 
