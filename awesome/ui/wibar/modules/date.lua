@@ -1,17 +1,3 @@
-
-local naughty = require("naughty")
-
--- Function to create and show a notification
-local function notif(title, message)
-    naughty.notify({
-        title = title,
-        text = message,
-        timeout = 1,
-        position = "top_right"  -- Position of the notification
-    })
-end
-
-
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
@@ -21,7 +7,6 @@ local theme = beautiful.modules.date
 local dpi = beautiful.xresources.apply_dpi
 
 local DATE_FORMAT         = "%a %B %d"
-local CALENDAR_ICON       = theme.icon.calendar
 
 local bg_color_markup     = theme.widget.markup.background
 local fg_color_markup     = theme.widget.markup.foreground
@@ -41,15 +26,9 @@ local internal_widget_textclock = {
         fg_color_markup, bg_color_markup, DATE_FORMAT),
 }
 
--- local internal_icon_textbox = {
---     widget = wibox.widget.textbox,
---     markup = string.format(
---         "<span color='%s' bgcolor='%s' bgalpha='65535'>%s</span>",
---         fg_color_markup, bg_color_markup, CALENDAR_ICON),
--- }
 local internal_svg_imagebox = {
     widget = wibox.widget.imagebox(),
-    image = theme.icon.calendar_svg,
+    image = theme.icon.calendar,
     resize = true,
     valign = "center",
     halign = "center",
@@ -98,8 +77,6 @@ local container_widget_table = {
     },
 }
 
-
-local date_widget = internal_widget_textclock.widget
 local full_date_widget = wibox.widget(container_widget_table)
 
 local pop = awful.popup {
@@ -113,29 +90,25 @@ local pop = awful.popup {
         margins = 11,
         widget  = wibox.container.margin
     },
-    bind_to_widget = full_date_widget,
     hide_on_right_click = true,
     border_color = border_color_popup,
     border_width = border_width_popup,
-
-    x = 1727 - 7,
+    x = 1727 - 42,
     y = 33 + 5,
     visible = false,
     ontop = true,
 }
 
-
 full_date_widget.buttons = {
     awful.button(nil, 1, function()
-        if(pop.visible) then
+        if pop.visible then
             pop.visible = false
         else
             pop.visible = true
         end
     end),
-
     awful.button(nil, 3, function()
-        if(pop.visible) then
+        if pop.visible then
             pop.visible = false
         else
             pop.visible = true

@@ -1,25 +1,12 @@
-local naughty = require("naughty")
+local awful       = require("awful")
+local bling       = require("module.bling")
 
+local mod         = require("binds.mod")
+local modkey      = mod.modkey
 
--- Function to create and show a notification
-local function notif(title, message)
-    naughty.notify({
-        title = title,
-        text = message,
-        timeout = 15,
-        position = "top_right"  -- Position of the notification
-    })
-end
-
-local awful    = require("awful")
-local bling    = require("module.bling")
-local rubato   = require("module.rubato")
-
-local mod      = require("binds.mod")
-local modkey   = mod.modkey
-
-local apps     = require("config.apps")
-local ui_module  = require("ui")
+local scratchpads = require("config.scratchpads")
+local apps        = require("config.apps")
+local ui_module   = require("ui")
 
 local gapTable = { 0, 5 }
 local gapIndex = 1
@@ -32,48 +19,43 @@ awful.key.keygroups.hjkl = {
 }
 awful.key.keygroup.HJKL = "hjkl"
 
-local anim_y = rubato.timed {
-    pos = 1090,
-    rate = 144,
-    easing = rubato.quadratic,
-    intro = 0.1,
-    duration = 0.3,
-    awestore_compat = true
-}
-
-local anim_x = rubato.timed {
-    pos = -970,
-    rate = 144,
-    easing = rubato.quadratic,
-    intro = 0.1,
-    duration = 0.3,
-    awestore_compat = true
-}
-
-local term_scratch = bling.module.scratchpad {
-    command = "alacritty --class spad",           -- How to spawn the scratchpad
-    rule = { instance = "spad" },                     -- The rule that the scratchpad will be searched by
-    sticky = true,                                    -- Whether the scratchpad should be sticky
-    autoclose = true,                                 -- Whether it should hide itself when losing focus
-    floating = true,                                  -- Whether it should be floating (MUST BE TRUE FOR ANIMATIONS)
-    reapply = true,
-    dont_focus_before_close  = false,
-    geometry = {
-        x = 360,
-        y = 90,
-        height = 900,
-        width = 1200
-    },
-    rubato = {
-        x = anim_x,
-        y = anim_y
-    }
-
-}
 local cmd_binds = {}
-local scratchpad_up = false
 awful.keyboard.append_global_keybindings({
-
+    awful.key(
+        { modkey, },
+        "F1",
+        function ()
+            scratchpads.F1_pad:toggle_visibility()
+        end
+    ),
+    awful.key(
+        { modkey, },
+        "F2",
+        function ()
+            scratchpads.F2_pad:toggle_visibility()
+        end
+    ),
+    awful.key(
+        { modkey, },
+        "F3",
+        function ()
+            scratchpads.F3_pad:toggle_visibility()
+        end
+    ),
+    awful.key(
+        { modkey, },
+        "F4",
+        function ()
+            scratchpads.F4_pad:toggle_visibility()
+        end
+    ),
+    awful.key(
+        { modkey, },
+        "i",
+        function()
+            pad2.drop("alacritty --class drop")
+        end
+    ),
     awful.key(
         { modkey, },
         "w",
@@ -86,14 +68,14 @@ awful.keyboard.append_global_keybindings({
         { modkey, },
         "v",
         function()
-            term_scratch:turn_off()
+            scratch.toggle("alacritty --class scratch", { instance = "scratch" })
         end
     ),
     awful.key(
         { modkey, },
         "g",
         function()
-            term_scratch:turn_on()
+            term_scratch:toggle()
         end
     ),
 
@@ -577,21 +559,9 @@ cmd_binds.general = {
 cmd_binds.brightness = {
     awful.key(
         { modkey, },
-        "c",
-        function ()
-            awesome.emit_signal("ddcutil::brightness::set::current")
-        end,
-        {
-            description = "set monitor brightness w/ ddcutil",
-            group = "custom"
-        }
-    ),
-
-    awful.key(
-        { modkey, },
         "d",
         function ()
-            awesome.emit_signal("ddcutil::brightness::set::current", 41)
+            awesome.emit_signal("ddcutil::brightness::set::current")
         end,
         {
             description = "set monitor brightness w/ ddcutil",

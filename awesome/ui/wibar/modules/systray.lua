@@ -1,15 +1,8 @@
 local wibox     = require("wibox")
 local awful     = require("awful")
-local gears     = require("gears")
 local beautiful = require("beautiful")
 
 local theme = beautiful.modules.systray
-local dpi = beautiful.xresources.apply_dpi
-
-local SYSTRAY_ICON       = theme.icon.menu_svg
-
-local bg_color_markup     = theme.widget.markup.background
-local fg_color_markup     = theme.widget.markup.foreground
 
 local bg_color_widget     = theme.widget.background_container.background
 local fg_color_widget     = theme.widget.background_container.foreground
@@ -21,7 +14,7 @@ local border_width_popup  = theme.popup.border_width
 
 local internal_icon_imagebox = {
     widget = wibox.widget.imagebox(),
-    image = SYSTRAY_ICON,
+    image = theme.icon.menu,
 }
 
 local internal_systray = {

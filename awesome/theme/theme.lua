@@ -8,9 +8,7 @@ local gfs = require("gears.filesystem")
 local themes_path = gfs.get_configuration_dir() .. "theme/"
 
 local theme = {}
-
 theme.font          = "Jetbrains Mono Nerd Font Regular 13"
--- theme.font          = "cozette 10"
 
 local opacity_append = "aa"
 theme.bg_normal     = "#111114" .. opacity_append
@@ -30,8 +28,8 @@ theme.useless_gap         = dpi(5)
 theme.border_width        = dpi(2)
 -- theme.border_color_normal = "#000000"
 --theme.border_color_active = "#535d6c"
-theme.border_color_normal = "#00000000"
-theme.border_color_active = "#535d6c00"
+theme.border_color_normal = "#444444"
+theme.border_color_active = "#bbbbbb"
 theme.border_color_marked = "#91231c"
 
 
@@ -153,49 +151,8 @@ rnotification.connect_signal("request::rules", function()
     }
 end)
 
-local colors_2 = {
-
-    bg         = "#17181C",
-    mid_bg     = "#1E1F24",
-    light_bg   = "#26272B",
-    dark_grey  = "#333438",
-    light_grey = "#8F9093",
-    dark_fg    = "#B0B1B4",
-    mid_fg     = "#CBCCCE",
-    fg         = "#E4E5E7",
-    pink       = "#FA3867",
-    orange     = "#F3872F",
-    gold       = "#FEBD16",
-    lime       = "#3FD43B",
-    turquoise  = "#47E7CE",
-    blue       = "#53ADE1",
-    violet     = "#AD60FF",
-    red        = "#FC3F2C",
-    -- ansi = {
-    --     "#17181C",
-    --     "#FA3867",
-    --     "#3FD43B",
-    --     "#FEBD16",
-    --     "#53ADE1",
-    --     "#AD60FF",
-    --     "#47E7CE",
-    --     "#B0B1B4"
-    -- },
-    -- brights = {
-    --     "#26272B",
-    --     "#FA3867",
-    --     "#3FD43B",
-    --     "#FEBD16",
-    --     "#53ADE1",
-    --     "#AD60FF",
-    --     "#47E7CE",
-    --     "#E4E5E7"
-    -- }
-}
-
 local colors = {
     bright = {
-        -- black   = "#7f8c8d",
         black   = "#17181C",
         blue    = "#3daee9",
         cyan    = "#16a085",
@@ -241,17 +198,11 @@ theme.modules.date = {
             background   = colors.bright.black,
             foreground   = colors.bright.white,
             border_color = colors.bright.white,
-            border_width  = 1,
+            border_width = 1,
         },
     },
     icon = {
-        calendar_svg = themes_path .. "icons/calendar.svg",
-        calendar = " 󰃭 ",
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
+        calendar = themes_path .. "icons/calendar.svg",
         background_container = {
             background   = colors.bright.black,
             foreground   = colors.bright.white,
@@ -280,13 +231,7 @@ theme.modules.time = {
         },
     },
     icon = {
-        clock_svg = themes_path .. "icons/clock.svg",
-        clock = "  ",
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
+        clock = themes_path .. "icons/clock.svg",
         background_container = {
             background   = colors.bright.black,
             foreground   = colors.bright.white,
@@ -311,16 +256,9 @@ theme.modules.volume = {
         },
     },
     icon = {
-        volume_svg = themes_path .. "icons/volume_2.svg",
-        muted_svg = themes_path .. "icons/muted_2.svg",
-        volume  = " 󰕾 ",
-        mute    = " 󰖁 ",
+        volume = themes_path .. "icons/volume.svg",
+        mute = themes_path .. "icons/muted.svg",
         percent = "%",
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.red,
-            alpha      = theme.MAX_ALPHA,
-        },
         background_container = {
             background   = colors.bright.black,
             foreground   = colors.bright.red,
@@ -345,45 +283,7 @@ theme.modules.ddcutil = {
         },
     },
     icon = {
-        brightness_svg = themes_path .. "icons/ddcutil_brightness_3.svg",
-        brightness = " 󰛩 ",
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 2,
-        },
-    }
-}
-
-theme.modules.redshift = {
-    widget = {
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 1,
-        },
-    },
-    icon = {
-        temperature = "  ",
-        daytime     = "  ",
-        night       = "  ",
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
+        brightness = themes_path .. "icons/ddcutil_brightness.svg",
         background_container = {
             background   = colors.bright.black,
             foreground   = colors.bright.white,
@@ -408,12 +308,7 @@ theme.modules.systray = {
         },
     },
     icon = {
-        menu_svg = themes_path .. "icons/menu.svg",
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
+        menu = themes_path .. "icons/menu.svg",
         background_container = {
             background   = colors.bright.black,
             foreground   = colors.bright.white,
@@ -434,31 +329,7 @@ theme.modules.layoutbox = {
     border_width  = 1,
 }
 
---
--- theme.widget = {}
--- theme.widget.icon = {}
--- theme.widget.bg_markup           = colors.bright.black
--- theme.widget.fg_markup           = colors.bright.white
--- theme.widget.alpha_markup        = 65535
---
--- theme.widget.bg_widget     = colors.bright.black
--- theme.widget.fg_widget     = colors.bright.white
--- theme.widget.border_widget = colors.bright.white
--- theme.widget.border_width   = 2
---
--- theme.widget.icon.bg_markup      = colors.bright.black
--- theme.widget.icon.fg_icon_markup = colors.bright.white
--- theme.widget.icon.alpha_markup   = 65535
---
--- theme.widget.icon.bg_widget     = colors.bright.black
--- theme.widget.icon.fg_widget     = colors.bright.white
--- theme.widget.icon.border_widget = colors.dim.black
--- theme.widget.icon.border_width   = 2
---
--- theme.widget.border_popup = colors.bright.white .. opacity_append
-
 theme.systray_icon_spacing = 5
-
 theme.thin_space = " "
-    -- return " "
+
 return theme

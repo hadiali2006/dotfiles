@@ -1,4 +1,3 @@
--- Allows all signals to be connected and/or emitted.
 return {
 	client = require(... .. ".client"),
 	-- NOTE: The `tag` file must be loaded before the `screen` one so that

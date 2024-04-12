@@ -1,7 +1,5 @@
 -- awesome_mode: api-level=4:screen=on
 
--- If LuaRocks is installed, make sure that packages installed through it are
--- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
 local naughty = require("naughty")
@@ -25,5 +23,3 @@ require("signal")
 require("binds")
 require("config.rules")
 require("module.autostart")
-
-require("config.scratchpad")

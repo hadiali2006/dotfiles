@@ -1,40 +1,30 @@
 local awful     = require("awful")
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
-local log       = require("module.debug")
 
 local theme = beautiful.modules.volume
 
-local MAX_VOLUME               = 100
-local MIN_VOLUME               = 0
+local MAX_VOLUME           = 100
+local MIN_VOLUME           = 0
+local volume_icon          = theme.icon.volume
+local mute_icon            = theme.icon.mute
+local percent_icon         = theme.icon.percent
 
-local volume_svg = theme.icon.volume_svg
+local icon_widget_bg_color = theme.icon.background_container.background
+local icon_widget_fg_color = theme.icon.background_container.foreground
 
-local volume_icon              = theme.icon.volume
-local mute_icon                = theme.icon.mute
-local percent_icon             = theme.icon.percent
+local bg_color_markup      = theme.widget.markup.background
+local fg_color_markup      = theme.widget.markup.foreground
+local bg_alpha_markup      = theme.widget.markup.alpha
 
-local icon_markup_bg_color     = theme.icon.markup.background
-local icon_markup_fg_color     = theme.icon.markup.foreground
-local icon_markup_bg_alpha     = theme.icon.markup.alpha
-
-local icon_widget_bg_color     = theme.icon.background_container.background
-local icon_widget_fg_color     = theme.icon.background_container.foreground
-local icon_widget_border_color = theme.icon.background_container.border_color
-local icon_widget_border_width = theme.icon.background_container.border_width
-
-local bg_color_markup          = theme.widget.markup.background
-local fg_color_markup          = theme.widget.markup.foreground
-local bg_alpha_markup          = theme.widget.markup.alpha
-
-local bg_color_widget          = theme.widget.background_container.background
-local fg_color_widget          = theme.widget.background_container.foreground
-local border_color_widget      = theme.widget.background_container.border_color
-local border_width_widget      = theme.widget.background_container.border_width
+local bg_color_widget      = theme.widget.background_container.background
+local fg_color_widget      = theme.widget.background_container.foreground
+local border_color_widget  = theme.widget.background_container.border_color
+local border_width_widget  = theme.widget.background_container.border_width
 
 local internal_svg_imagebox = {
     widget = wibox.widget.imagebox(),
-    image = theme.icon.volume_svg,
+    image = volume_icon,
     resize = true
 }
 
@@ -42,13 +32,8 @@ local internal_volume_textbox = {
     widget = wibox.widget.textbox()
 }
 
-local internal_icon_textbox = {
-    widget = wibox.widget.textbox()
-}
-
 local thin_space = {
-    widget = wibox.widget.textbox(),
-    text = beautiful.thin_space,
+    widget = wibox.widget.textbox(beautiful.thin_space),
 }
 
 local container_widget_table = {
@@ -57,8 +42,8 @@ local container_widget_table = {
             {
                 wibox.widget.textbox(" "),
                 widget = wibox.container.background,
-                bg     = icon_widget_bg_color,
-                fg     = icon_widget_fg_color,
+                bg     = bg_color_widget,
+                fg     = fg_color_widget,
             },
             {
                 internal_svg_imagebox,
@@ -67,6 +52,7 @@ local container_widget_table = {
                 fg     = icon_widget_fg_color,
             },
             {
+                thin_space,
                 widget = wibox.container.background,
                 bg     = bg_color_widget,
                 fg     = fg_color_widget,
@@ -98,8 +84,6 @@ local container_widget_table = {
     },
 }
 
-local svg_widget = internal_svg_imagebox.widget
-local icon_widget        = internal_icon_textbox.widget
 local volume_widget      = internal_volume_textbox.widget
 local full_volume_widget = wibox.widget(container_widget_table)
 
@@ -140,8 +124,8 @@ full_volume_widget.buttons = {
     end),
 }
 
---- Given a function callback, gets current volume and mute status from wpctl within the shell.
---- @param callback (function): Arbritary function which passes in the volume and mute status.
+---Given a function callback, gets current volume and mute status from wpctl within the shell.
+---@param callback (function): Arbritary function which passes in the volume and mute status.
 local function get_volume_from_wpctl(callback)
     awful.spawn.easy_async(volume_commands.get_volume_status,
         function (stdout)
@@ -151,26 +135,27 @@ local function get_volume_from_wpctl(callback)
         end)
 end
 
---- Get the current volume from markup text.
---- @param widget_markup (string): Current markup text in widget.
---- @return (string): Parsed volume from markup text.
+---Get the current volume from markup text.
+---@param widget_markup string: Current markup text in widget.
+---@return string?: Parsed volume from markup text. nil if volume is muted at startup.
 local function get_volume_from_markup(widget_markup)
-    return widget_markup:match(
-        string.format("<span.->(.-)%s</span>",
-            "%" .. percent_icon))
+    if widget_markup then
+        return widget_markup:match(string.format(
+        "<span.->(.-)%s</span>", "%" .. percent_icon))
+    end
 end
 
---- Set volume status within textbox widget markup.
---- @param new_content (number|string): Volume to set into markup of volume widget. Empty string if muting or current volume as a number.
+---Set volume status within textbox widget markup.
+---@param new_content number|string: Volume to set into markup of volume widget. Empty string if muting or current volume as a number.
 local function set_volume_widget_content(new_content)
     volume_widget:set_markup_silently(string.format(
         "<span color='%s' bgcolor='%s'>%s%s</span>",
         fg_color_markup, bg_color_markup, new_content, percent_icon))
 end
 
---- Increase volume in the widget.
---- @param volume number|string: Volume to set into volume widget. String when parsed from markup or number when parsed from wpctl stdout.
---- @param mod number: The amount the volume will be increased.
+---Increase volume in the widget.
+---@param volume number|string: Volume to set into volume widget. String when parsed from markup or number when parsed from wpctl stdout.
+---@param mod number: The amount the volume will be increased.
 local function increase_volume(volume, mod)
     if(volume + mod) >= MAX_VOLUME then
         set_volume_widget_content(MAX_VOLUME)
@@ -179,9 +164,9 @@ local function increase_volume(volume, mod)
     end
 end
 
---- Decrease volume in the widget.
---- @param volume number|string: Volume to set into volume widget. String when parsed from markup or number when parsed from wpctl stdout.
---- @param mod number: The amount the volume will be decreased.
+---Decrease volume in the widget.
+---@param volume (number|string?): Volume to set into volume widget. String when parsed from markup or number when parsed from wpctl stdout.
+---@param mod number: The amount the volume will be decreased.
 local function decrease_volume(volume, mod)
     if (volume - mod) <= MIN_VOLUME then
         set_volume_widget_content(MIN_VOLUME)
@@ -192,71 +177,61 @@ end
 
 awesome.connect_signal("volume::increase", function (mod)
     local parsed_volume = get_volume_from_markup(volume_widget:get_markup())
-    if parsed_volume == "" then
+    if not volume_widget.visible then
         get_volume_from_wpctl(function (volume)
             increase_volume(volume, mod)
         end)
-        percent_icon = theme.icon.percent
-        internal_svg_imagebox.widget:set_image(theme.icon.volume_svg)
-        thin_space.widget.visible = false
-    else
-        if(parsed_volume + mod) >= MAX_VOLUME then
-            set_volume_widget_content(MIN_VOLUME)
-        else
+        thin_space.widget.visible = true
+        volume_widget.visible     = true
+        percent_icon              = theme.icon.percent
+        internal_svg_imagebox.widget:set_image(volume_icon)
+    elseif parsed_volume then
             increase_volume(parsed_volume, mod)
-        end
     end
 end)
 
 awesome.connect_signal("volume::decrease", function (mod)
     local parsed_volume = get_volume_from_markup(volume_widget:get_markup())
-    if parsed_volume == "" then
+    if not volume_widget.visible then
         get_volume_from_wpctl(function (volume)
             decrease_volume(volume, mod)
         end)
-        percent_icon = theme.icon.percent
-        internal_svg_imagebox.widget:set_image(theme.icon.volume_svg)
-        thin_space.widget.visible = false
-    else
-        if (parsed_volume - mod) <= MIN_VOLUME then
-            set_volume_widget_content(MIN_VOLUME)
-        else
+        thin_space.widget.visible = true
+        volume_widget.visible     = true
+        percent_icon              = theme.icon.percent
+        internal_svg_imagebox.widget:set_image(volume_icon)
+    elseif parsed_volume then
             decrease_volume(parsed_volume, mod)
-        end
     end
 end)
 
 awesome.connect_signal("volume::togglemute", function ()
-    local parsed_volume = get_volume_from_markup(volume_widget:get_markup())
-    if parsed_volume == "" then
+    if not volume_widget.visible then
         get_volume_from_wpctl(function (volume)
             set_volume_widget_content(volume)
         end)
-        percent_icon = theme.icon.percent
-        internal_svg_imagebox.widget:set_image(theme.icon.volume_svg)
         thin_space.widget.visible = true
+        volume_widget.visible     = true
+        percent_icon              = theme.icon.percent
+        internal_svg_imagebox.widget:set_image(volume_icon)
     else
-        percent_icon = ""
-        internal_svg_imagebox.widget:set_image(theme.icon.muted_svg)
         thin_space.widget.visible = false
-        set_volume_widget_content("")
-
+        volume_widget.visible = false
+        percent_icon          = ""
+        internal_svg_imagebox.widget:set_image(mute_icon)
     end
 end)
 
---- @return wibox.widget.base: Return container widget to be added to wibar.
+---@return wibox.widget.base: Return container widget to be added to wibar.
 return function ()
     get_volume_from_wpctl(function (volume_status, is_muted)
         if is_muted then
             thin_space.widget.visible = false
-            percent_icon = ""
-            internal_svg_imagebox.widget:set_image(theme.icon.muted_svg)
-            -- set_icon_widget_content("")
-            -- set_volume_widget_content(mute_icon)
+            volume_widget.visible     = false
+            percent_icon              = ""
+            internal_svg_imagebox.widget:set_image(mute_icon)
         else
-            -- set_icon_widget_content(volume_icon)
-            --
-            internal_svg_imagebox.widget:set_image(theme.icon.volume_svg)
+            internal_svg_imagebox.widget:set_image(volume_icon)
             set_volume_widget_content(volume_status)
         end
     end)

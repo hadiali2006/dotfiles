@@ -1,6 +1,5 @@
-local awful = require("awful")
-local wibox = require("wibox")
-
+local awful  = require("awful")
+local wibox  = require("wibox")
 local module = require(... .. ".modules")
 
 local left_widgets = function (s)
@@ -9,8 +8,6 @@ local left_widgets = function (s)
         wibox.widget.textbox(" "),
         -- module.launcher(),
         module.systray(),
-        -- module.redshift(),
-        -- module.cal(),
         module.volume(),
         module.brightness(),
         module.taglist(s),

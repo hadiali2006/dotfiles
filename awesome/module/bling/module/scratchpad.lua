@@ -5,6 +5,7 @@ local helpers = require(tostring(...):match(".*bling") .. ".helpers")
 local capi = { awesome = awesome, client = client }
 local ruled = capi.awesome.version ~= "v4.3" and require("ruled") or nil
 local pairs = pairs
+-- local log = require("module.debug")
 
 local Scratchpad = { mt = {} }
 
@@ -161,6 +162,7 @@ end
 --
 -- @return A list of all clients that satisfy the rule
 function Scratchpad:find()
+    -- log(helpers.client.find(self.rule))
     return helpers.client.find(self.rule)
 end
 

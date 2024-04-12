@@ -5,9 +5,8 @@ local wibox = require("wibox")
 local dpi = beautiful.xresources.apply_dpi
 local theme = beautiful.modules.time
 
-local CLOCK_ICON                = theme.icon.clock
 local CLOCK_UPDATE_RATE_IN_SECONDS = 1
-local CLOCK_FORMAT              = "%I:%M:%S %p"
+local CLOCK_FORMAT                 = "%I:%M:%S %p"
 
 local bg_color_markup     = theme.widget.markup.background
 local fg_color_markup     = theme.widget.markup.foreground
@@ -20,12 +19,10 @@ local border_width_widget = theme.widget.background_container.border_width
 
 local internal_svg_imagebox = {
     widget = wibox.widget.imagebox(),
-    image = theme.icon.clock_svg,
+    image = theme.icon.clock,
     resize = true,
     valign = "center",
     halign = "center",
-    -- forced_width  = ,
-    -- forced_height  = 18,
     scaling_quality = "best"
 }
 
@@ -35,13 +32,6 @@ local internal_widget_textclock = {
     format = string.format(
         "<span color='%s' bgcolor='%s' bgalpha='65535'>%s </span>",
         fg_color_markup, bg_color_markup, CLOCK_FORMAT),
-}
-
-local internal_icon_textbox = {
-    widget = wibox.widget.textbox,
-    markup = string.format(
-        "<span color='%s' bgcolor='%s' bgalpha='65535'>%s</span>",
-        fg_color_markup, bg_color_markup, CLOCK_ICON),
 }
 
 local container_widget_table = {
@@ -86,8 +76,8 @@ local container_widget_table = {
     },
 }
 
-local clock_widget = wibox.widget(container_widget_table)
+local full_clock_widget = wibox.widget(container_widget_table)
 
 return function ()
-    return clock_widget
+    return full_clock_widget
 end

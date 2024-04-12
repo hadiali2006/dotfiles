@@ -1,145 +1,194 @@
-local gears           = require("gears")
-local naughty         = require("naughty")
-local awful           = require("awful")
-local key             = awful.key
-local keyboard        = awful.keyboard
-
-local PermanentScratchpad = require(... .. ".permanent_scratchpad")
-local TemporaryScratchpad = require(... .. ".temporary_scratchpad")
--- local hotkeys = require("widgets.hotkeys").default_instance
-
-local ret = {
-    _private = {
-        permanent_scratchpads = {},
-        temporary_scratchpads = {},
-    },
+local awful = require("awful")
+local capi = {
+    client = client,
+    mouse  = mouse,
+    screen = screen
 }
 
-local function val_or_default(val, default)
-    if val == nil then
-        return default
-    end
-    return val
+---@class scratchpad
+---@field has_been_run boolean: If the scratchpad has been run in any way.
+---@field command string: Shell command used to spawn a client.
+---@field options table: Proporties applied to the client as scratchpad.
+---@field client client?: Current scratchpad client.
+---@field screen screen: The screen that the scratchpad displays to.
+local scratchpad = {}
+
+---Constructor for the scratchpad class.
+---@return table: Scratchpad object.
+function scratchpad:new(args)
+    local obj = {}
+    self.__index = self
+    setmetatable(obj, self)
+    obj.has_been_run = false
+    obj.command      = args.command or "alacritty"
+    obj.options      = args.options
+    obj.client       = args.client
+    obj.screen       = args.screen or awful.screen.focused()
+    return obj
 end
 
-function ret:add(args)
-    local scratchpad = PermanentScratchpad:new {
-        command             = args.command,
-        class               = args.class,
-        props               = args.client_props,
-        close_on_focus_lost = val_or_default(args.close_on_focus_lost, self.args.close_on_focus_lost),
-        reapply_props       = val_or_default(args.reapply_props, self.args.reapply_props),
-    }
-
-    if args.hotkey then
-        keyboard.append_global_keybindings {
-            key {
-                modifiers   = args.hotkey.modifiers,
-                key         = args.hotkey.key,
-                description = args.hotkey.description,
-                group       = args.hotkey.group,
-                on_press    = function ()
-                    scratchpad:toggle()
-                end
-            }
+---Getter for client options table. Will define any property if it wasn't already defined.
+---@return table: Client options.
+function scratchpad:get_client_options()
+    local options = {}
+    options.floating     = self.options.floating     or false
+    options.skip_taskbar = self.options.skip_taskbar or false
+    options.ontop        = self.options.ontop        or false
+    options.above        = self.options.above        or false
+    options.sticky       = self.options.sticky       or false
+    if self.options.geometry then
+        options.geometry = {
+            width  = self.options.geometry.width  or 1200,
+            height = self.options.geometry.height or 900,
+            x      = self.options.geometry.x      or 360,
+            y      = self.options.geometry.y      or 90,
         }
-
-        -- hotkeys:add_keygroups({
-        --     ["Scratchpad"] = {
-        --         {
-        --             key = args.hotkey.key,
-        --             description = args.hotkey.description,
-        --             mods = args.hotkey.modifiers,
-        --         }
-        --     }
-        -- })
+    else
+        options.geometry = {
+            width  = 1200,
+            height = 900,
+            x      = 360,
+            y      = 90,
+        }
     end
-
-    self._private.permanent_scratchpads[args.class] = scratchpad
-    return scratchpad
+    return options
 end
 
-function ret:add_temp(args)
-    local scratchpad = TemporaryScratchpad:new {
-        props               = args.client_props,
-        close_on_focus_lost = val_or_default(args.close_on_focus_lost, self.args.close_on_focus_lost),
-        reapply_props       = val_or_default(args.reapply_props, self.args.reapply_props),
-    }
-
-    if args.hotkey then
-        keyboard.append_global_keybindings {
-            key {
-                modifiers   = args.hotkey.modifiers,
-                key         = args.hotkey.key,
-                description = args.hotkey.description,
-                group       = args.hotkey.group,
-                on_press    = function ()
-                    scratchpad:toggle()
-                end
-            },
-            key {
-                modifiers   = args.hotkey.client_toggle_modifiers,
-                key         = args.hotkey.key,
-                description = "Toggle " .. args.hotkey.description,
-                group       = args.hotkey.group,
-                on_press    = function ()
-                    scratchpad:toggle_client()
-                end
-            }
-        }
-        -- hotkeys:add_keygroups({
-        --     ["Scratchpad"] = {
-        --         {
-        --             key = args.hotkey.key,
-        --             description = args.hotkey.description,
-        --             mods = args.hotkey.modifiers,
-        --         },
-        --         {
-        --             key = args.hotkey.key,
-        --             description = "Toggle" .. args.hotkey.description,
-        --             mods = args.hotkey.client_toggle_modifiers,
-        --         }
-        --     }
-        -- })
-    end
-
-    table.insert(self._private.temporary_scratchpads, scratchpad)
-    return scratchpad
-end
-
-function ret:toggle(class)
-    local scratchpad = self._private.scratchpads[class]
-    if not scratchpad or not scratchpad.command or not scratchpad.class then
-        naughty.notify {
-            title = "Missing Scratchpad",
-            message = "Scratchpad " .. class " .. is missing or malformed",
-        }
+---Apply client properties to the scratchpad as per defined in options table.
+function scratchpad:apply_properties()
+    if not self.client then
         return
     end
+    local props = self:get_client_options()
+    local screen_workarea = self.screen.workarea
+    local screen_geometry = self.screen.geometry
 
-    scratchpad:toggle()
+    if props.floating then
+        self.client:set_floating(true)
+    end
+    if props.skip_taskbar then
+        self.client.skip_taskbar = true
+    end
+    if props.ontop then
+        self.client.ontop = true
+    end
+    if props.above then
+        self.client.above = true
+    end
+    if props.sticky then
+        self.client.sticky = true
+    end
+    if props.width and props.width <= 1 then
+        props.width = screen_workarea.width * props.width
+    end
+    if props.height and props.height <= 1 then
+        props.height = screen_workarea.height * props.height
+    end
+    awful.client.property.set(self.client, "floating_geometry", self.client:geometry({
+        x      = screen_geometry.x + props.geometry.x,
+        y      = screen_geometry.y + props.geometry.y,
+        width  = props.geometry.width,
+        height = props.geometry.height,
+    }))
 end
 
-function ret:init(args)
-    self.args = args or {}
-    client.connect_signal("request::manage", function (c, context)
-        local scratchpad = self._private.permanent_scratchpads[c.class]
-        if scratchpad then
-            scratchpad:set_client(c)
-            if context == "startup" then
-                gears.timer.delayed_call(function ()
-                    scratchpad:hide()
-                end)
-            end
-        end
-    end)
-    awesome.connect_signal("exit", function (is_restart)
-        if is_restart then
-            for _, v in ipairs(self._private.temporary_scratchpads) do
-                v:destroy()
-            end
-        end
-    end)
+---Disable any client properties applied to the scratchpad as per defined in options table.
+function scratchpad:unapply_properties()
+    if not self.client then
+        return
+    end
+    local props = self:get_client_options()
+    if self.client.hidden then
+        self.client.hidden = false
+        self.client:move_to_tag(awful.tag.selected(self.screen))
+    end
+    if props.floating then
+        self.client:set_floating(false)
+    end
+    if props.skip_taskbar then
+        self.client.skip_taskbar = false
+    end
+    if props.ontop then
+        self.client.ontop = false
+    end
+    if props.above then
+        self.client.above = false
+    end
+    if props.sticky then
+        self.client.sticky = false
+    end
 end
 
-return ret
+---Connect unmanage signal if there hasn't been usage of toggle() or set()
+function scratchpad:connect_unmanage_signal()
+    if self.has_been_run == false then
+        self.has_been_run = true
+        capi.client.connect_signal("request::unmanage", function (current_client)
+            if self.client == current_client then
+                self.client = nil
+            end
+        end)
+    end
+end
+
+---Enable current scratchpad client visibility.
+function scratchpad:turn_on()
+    self.client.hidden = false
+    self.client:move_to_tag(awful.tag.selected(self.screen))
+    capi.client.focus = self.client
+end
+
+---Disable current scratchpad client visibility.
+function scratchpad:turn_off()
+    self.client.hidden = true
+    local client_tags = self.client:tags()
+    for i, _ in pairs(client_tags) do
+        client_tags[i] = nil
+    end
+    self.client:tags(client_tags)
+end
+
+---Toggle current scratchpad client visibility. If there isnt one, spawn a new one.
+function scratchpad:toggle_visibility()
+    self:connect_unmanage_signal()
+    if not self.client then
+        local initial_apply
+        initial_apply = function (client)
+            self.client = client
+            self:apply_properties()
+            capi.client.disconnect_signal("request::manage", initial_apply)
+        end
+        capi.client.connect_signal("request::manage", initial_apply)
+        awful.spawn(self.command, false)
+    else
+        if self.client.hidden then
+            self:turn_on()
+        else
+            self:turn_off()
+        end
+    end
+end
+
+function scratchpad:set_client_to_scratchpad(client)
+    self.client = client
+    self:apply_properties()
+end
+
+---Toggle whether or not the focused client is the scratchpad.
+---If it is already a scratchpad, disable its scratchpad status. Otherwise set as the scratchpad.
+---@param client client: Client to get set to the current scratchpad.
+function scratchpad:toggle_scratched_status(client)
+    self:connect_unmanage_signal()
+    if not self.client then
+        self:set_client_to_scratchpad(client)
+    else
+        self:unapply_properties()
+        if self.client == client then
+            self.client = nil
+        else
+            self:set_client_to_scratchpad(client)
+        end
+    end
+end
+
+return scratchpad

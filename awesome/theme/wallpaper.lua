@@ -1,1 +1,1 @@
-return "/" .. tostring(math.random(1, 10)) .. ".png"
+return "/" .. tostring(1) .. ".png"

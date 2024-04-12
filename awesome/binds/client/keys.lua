@@ -1,9 +1,7 @@
-local awful  = require("awful")
-local bling  = require("module.bling")
-local naughty = require("naughty")
-
-local mod    = require("binds.mod")
-local modkey = mod.modkey
+local awful       = require("awful")
+local scratchpads = require("config.scratchpads")
+local mod         = require("binds.mod")
+local modkey      = mod.modkey
 
 local is_floating = function(client)
     return
@@ -18,8 +16,35 @@ awful.key.keygroups.hjkl = {
     { "l", "L"},
 }
 awful.key.keygroup.HJKL = "hjkl"
-
 local client_state_binds = {
+    awful.key(
+        { modkey, mod.alt },
+        "F1",
+        function (c)
+            scratchpads.F1_pad:toggle_scratched_status(c)
+        end
+    ),
+    awful.key(
+        { modkey, mod.alt },
+        "F2",
+        function (c)
+            scratchpads.F2_pad:toggle_scratched_status(c)
+        end
+    ),
+    awful.key(
+        { modkey, mod.alt },
+        "F3",
+        function (c)
+            scratchpads.F3_pad:toggle_scratched_status(c)
+        end
+    ),
+    awful.key(
+        { modkey, mod.alt },
+        "F4",
+        function (c)
+            scratchpads.F4_pad:toggle_scratched_status(c)
+        end
+    ),
     awful.key(
         { modkey, mod.shift },
         "t",
@@ -46,16 +71,6 @@ local client_state_binds = {
         "q",
         function(c)
             c:kill()
-            -- naughty.notify({ title = tostring(c.selected_tag) })
-            if(awful.layout.get(c.screen) == awful.layout.suit.max) then
-                local last_minimized_client = awful.client.restore()
-                if last_minimized_client then
-                    last_minimized_client:activate({
-                        raise = true,
-                        context = "key.unminimize"
-                    })
-                end
-            end
         end,
         {
             description = "close",

@@ -5,9 +5,7 @@ return {
     systray    = require(... .. ".systray"),
     layoutbox  = require(... .. ".layoutbox"),
     volume     = require(... .. ".volume"),
-    cal        = require(... .. ".cal"),
     time       = require(... .. ".time"),
-    brightness = require(... .. ".ddcutil_brightness"),
+    brightness = require(... .. ".ddcutil"),
     date       = require(... .. ".date"),
-    redshift   = require(... .. ".redshift"),
 }
