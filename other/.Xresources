@@ -1,0 +1,78 @@
+Xft.dpi: 120
+Xft.rgba: rgb
+
+/* ! special */
+/* *.foreground:   #dfe2e7 */
+/* *.background:   #222831 */
+/* *.cursorColor:  #dfe2e7 */
+/**/
+/* ! black */
+/* *.color0:       #252c36 */
+/* !*.color8: #333c4a */
+/* !*.color8: #161a20 */
+/* *.color8:       #2c3440 */
+/**/
+/* ! red */
+/* *.color1:       #de615c */
+/* *.color9:       #e8908d */
+/**/
+/* ! green */
+/* *.color2:       #91d89a */
+/* *.color10:      #b2e4b8 */
+/**/
+/* ! yellow */
+/* *.color3:       #ffc469 */
+/* *.color11:      #ffd696 */
+/**/
+/* ! blue */
+/* *.color4:       #8fc7ff */
+/* *.color12:      #b1d8ff */
+/**/
+/* ! magenta */
+/* *.color5:       #f2b9c1 */
+/* *.color13:      #f6ced4 */
+/**/
+/* ! cyan */
+/* *.color6:       #9cfdff */
+/* *.color14:      #bafeff */
+/**/
+/* ! white */
+/* *.color7:       #dfe2e7 */
+/* *.color15:      #e9ebee */
+
+! special
+*.foreground:   #d9dfe4
+*.background:   #1b2026
+*.cursorColor:  #d9dfe4
+
+! black
+*.color0:       #1f242b
+*.color8:       #242930
+
+! red
+*.color1:       #df625d
+*.color9:       #f1726b
+
+! green
+*.color2:       #91d89a
+*.color10:      #a1e9aa
+
+! yellow
+*.color3:       #fdc267
+*.color11:      #ffd79d
+
+! blue
+*.color4:       #8ec6ff
+*.color12:      #add6ff
+
+! magenta
+*.color5:       #f2b9c1
+*.color13:      #ffcbd2
+
+! cyan
+*.color6:       #77e2e3
+*.color14:      #88f3f3
+
+! white
+*.color7:       #d9dfe4
+*.color15:      #d9dfe4

@@ -1,6 +1,0 @@
-[submodule "scratchpad"]
-    path = /awesome/module/scratchpad
-    url  = https://github.com/hadiali2006/scratchpad.git
-[submodule "bling"]
-    path = /awesome/module/bling
-    url  = https://github.com/BlingCorp/bling.git
