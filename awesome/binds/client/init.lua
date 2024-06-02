@@ -1,4 +1,5 @@
+local require = require
 return {
-    keys  = require(... .. ".keys"),
+    keys = require(... .. ".keys"),
     mouse = require(... .. ".mouse"),
 }

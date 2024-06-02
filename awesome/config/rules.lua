@@ -1,52 +1,60 @@
+local require = require
 local awful = require("awful")
 local ruled = require("ruled")
-
 ruled.client.connect_signal("request::rules", function()
     ruled.client.append_rule({
-        id         = "global",
-        rule       = { },
+        id = "global",
+        rule = {},
         properties = {
-            focus     = awful.client.focus.filter,
-            raise     = true,
-            screen    = awful.screen.preferred,
-            placement = function(c)
-                if c.floating and c.transient_for ~= nil then
-                    awful.placement.centered(c, { parent = c.transient_for })
-                else
-                    awful.placement.centered(c)
+            focus = awful.client.focus.filter,
+            raise = true,
+            screen = awful.screen.preferred,
+            placement = function(client)
+                if client.floating and client.transient_for then
+                    awful.placement.centered(client, { parent = client.transient_for })
+                    return
                 end
+                awful.placement.no_overlap(client)
+                awful.placement.no_offscreen(client)
             end,
-            callback = function (c)
-                c:to_secondary_section()
+            callback = function(client)
+                client:to_secondary_section()
             end
-        }
+        },
     })
+
+    -- Floating clients.
     ruled.client.append_rule({
-        id       = "floating",
+        id = "floating",
         rule_any = {
             instance = { "copyq", "pinentry" },
-            class    = {
-                "Gpick", "Nsxiv", "Tor Browser", "libreoffice",
+            class = {
+                "Arandr",
+                "Blueman-manager",
+                "Gpick",
+                "Kruler",
+                "Sxiv",
+                "Tor Browser",
+                "Wpa_gui",
+                "veromix",
+                "xtightvncviewer",
             },
-            --  NOTE: The name property shown in xprop might be set slightly after creation
-            --  of the client and the name shown there might not match defined rules here.
-            name    = {
-                "Event Tester"   -- xev.
+            -- Note that the name property shown in xprop might be set slightly after creation of the client
+            -- and the name shown there might not match defined rules here.
+            name = {
+                "Event Tester", -- xev.
             },
-            role    = {
-                "AlarmWindow",   -- Thunderbird"s calendar.
-                "ConfigManager", -- Thunderbird"s about:config.
-                "pop-up"         -- e.g. Google Chrome"s (detached) Developer Tools.
-            }
+            role = {
+                "AlarmWindow", -- Thunderbird's calendar.
+                "ConfigManager", -- Thunderbird's about:config.
+                "pop-up", -- e.g. Google Chrome's (detached) Developer Tools.
+            },
         },
-        properties = {
-            floating = true,
-            placement = awful.placement.centered,
-        }
+        properties = { floating = true },
     })
     ruled.client.append_rule({
-        id         = "titlebars",
-        rule_any   = { type = { "normal", "dialog" } },
-        properties = { titlebars_enabled = false }
+        id = "titlebars",
+        rule_any = { type = { "normal", "dialog" } },
+        properties = { titlebars_enabled = false },
     })
 end)

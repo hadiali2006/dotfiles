@@ -1,7 +1,6 @@
 return {
-    alt   = "Mod1",
-    super = "Mod4",
+    ctrl = "Control",
     shift = "Shift",
-    ctrl  = "Control",
-    modkey = require("config.user").mod or "Mod4",
+    super = "Mod4",
+    alt = "Mod1",
 }

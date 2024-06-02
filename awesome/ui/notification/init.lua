@@ -1,5 +1,4 @@
--- Allows for expanding into notifications for special cases, for example,
--- for music.
+local require = require
 return {
     normal = require(... .. ".normal"),
 }

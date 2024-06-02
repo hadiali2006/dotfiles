@@ -1,4 +1,4 @@
 return {
-	keys  = require(... .. ".keys"),
-	mouse = require(... .. ".mouse"),
+    keys = require(... .. ".keys"),
+    mouse = require(... .. ".mouse"),
 }

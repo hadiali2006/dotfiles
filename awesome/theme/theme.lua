@@ -1,44 +1,47 @@
-local theme_assets = require("beautiful.theme_assets")
-local xresources = require("beautiful.xresources")
-local rnotification = require("ruled.notification")
-local dpi = xresources.apply_dpi
+local require = require
+local beautiful = require("beautiful")
 local gears = require("gears")
+local ruled = require("ruled")
+local theme_assets = beautiful.theme_assets
+local xresources = beautiful.xresources
+local ruled_notification = ruled.notification
+local dpi = xresources.apply_dpi
 
-local gfs = require("gears.filesystem")
-local themes_path = gfs.get_configuration_dir() .. "theme/"
+local themes_path = gears.filesystem.get_configuration_dir() .. "theme/"
 
 local theme = {}
-theme.font          = "Jetbrains Mono Nerd Font Regular 13"
 
-local opacity_append = "aa"
-theme.bg_normal     = "#111114" .. opacity_append
-theme.bg_focus      = "#111114"
--- theme.bg_focus      = "#31363b"
+theme.wallpaper = themes_path .. "/wallpaper/1.png"
 
-theme.bg_urgent     = "#750800"
-theme.bg_minimize   = "#444444" .. opacity_append
-theme.bg_systray    = theme.bg_normal
+theme.fontt = "Jetbrains Mono Nerd Font Regular"
+theme.font = "Jetbrains Mono Nerd Font Regular 13"
 
-theme.fg_normal     = "#aaaaaa"
-theme.fg_focus      = "#ffffff"
-theme.fg_urgent     = "#ffffff"
-theme.fg_minimize   = "#ffffff"
+--262626
+theme.bg_normal = "#161616"
+theme.bg_focus = "#262626"
+theme.bg_urgent = "#a2191f"
+theme.bg_minimize = "#393939"
+theme.bg_systray = theme.bg_normal
 
-theme.useless_gap         = dpi(5)
-theme.border_width        = dpi(2)
--- theme.border_color_normal = "#000000"
---theme.border_color_active = "#535d6c"
-theme.border_color_normal = "#444444"
-theme.border_color_active = "#bbbbbb"
-theme.border_color_marked = "#91231c"
+theme.fg_normal = "#aaaaaa"
+theme.fg_focus = "#ffffff"
+theme.fg_urgent = "#ffffff"
+theme.fg_minimize = "#ffffff"
 
+theme.useless_gap = dpi(5)
+theme.border_width = dpi(2)
+theme.border_color_normal = "#000000"
+theme.border_color_active = "#ffffff"
+theme.border_color_marked = "#a2191f"
 
 theme.snap_bg = "#ffffff"
-theme.snap_border_width = 3
+theme.snap_border_width = dpi(3)
 theme.snap_shape = gears.shape.rectangle
+theme.screenshot_frame_color = "#ffffff"
+theme.screenshot_frame_shape = gears.shape.rectangle
 
 -- There are other variable sets
--- overriding the custom one when
+-- overriding the default one when
 -- defined, the sets are:
 -- taglist_[bg|fg]_[focus|urgent|occupied|empty|volatile]
 -- tasklist_[bg|fg]_[focus|urgent]
@@ -50,13 +53,9 @@ theme.snap_shape = gears.shape.rectangle
 --theme.taglist_bg_focus = "#ff0000"
 
 -- Generate taglist squares:
-local taglist_square_size = dpi(5)
-theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
-    taglist_square_size, theme.fg_normal
-)
-theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
-    taglist_square_size, theme.fg_normal
-)
+local taglist_square_size = dpi(4)
+theme.taglist_squares_sel = theme_assets.taglist_squares_sel(taglist_square_size, theme.fg_normal)
+theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(taglist_square_size, theme.fg_normal)
 
 -- Variables set for theming notifications:
 -- notification_font
@@ -67,9 +66,9 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
-theme.menu_submenu_icon = themes_path.."submenu.png"
+theme.menu_submenu_icon = themes_path .. "default/submenu.png"
 theme.menu_height = dpi(21)
-theme.menu_width  = dpi(180)
+theme.menu_width = dpi(180)
 
 -- You can add as many variables as
 -- you wish and access them by using
@@ -103,20 +102,6 @@ theme.titlebar_maximized_button_focus_inactive  = themes_path.."titlebar/maximiz
 theme.titlebar_maximized_button_normal_active   = themes_path.."titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_active    = themes_path.."titlebar/maximized_focus_active.png"
 
-local naughty = require("naughty")
-
--- Function to create and show a notification
-local function notif(title, message)
-    naughty.notify({
-        title = title,
-        text = message,
-        timeout = 5,  -- Timeout in seconds
-        position = "top_right"  -- Position of the notification
-    })
-end
-theme.wallpaper = themes_path.. "wallpapers" .. require("theme.wallpaper")
-
--- You can use your own layout icons like this:
 theme.layout_fairh      = themes_path.."layouts/fairhw.png"
 theme.layout_fairv      = themes_path.."layouts/fairvw.png"
 theme.layout_floating   = themes_path.."layouts/floatingw.png"
@@ -135,201 +120,31 @@ theme.layout_cornersw   = themes_path.."layouts/cornersww.png"
 theme.layout_cornerse   = themes_path.."layouts/cornersew.png"
 
 -- Generate Awesome icon:
-theme.awesome_icon = theme_assets.awesome_icon(
-    theme.menu_height, theme.bg_focus, theme.fg_focus
-)
+theme.awesome_icon = theme_assets.awesome_icon(theme.menu_height, theme.bg_focus, theme.fg_focus)
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
 theme.icon_theme = nil
 
 -- Set different colors for urgent notifications.
-rnotification.connect_signal("request::rules", function()
-    rnotification.append_rule {
-        rule       = { urgency = "critical" },
-        properties = { bg = "#ff0000", fg = "#ffffff" }
-    }
+ruled_notification.connect_signal("request::rules", function()
+    ruled_notification.append_rule({
+        rule = { urgency = "critical" },
+        properties = { bg = "#a2191f", fg = "#ffffff" },
+    })
 end)
 
-local colors = {
-    bright = {
-        black   = "#17181C",
-        blue    = "#3daee9",
-        cyan    = "#16a085",
-        green   = "#1cdc9a",
-        magenta = "#8e44ad",
-        red     = "#c0392b",
-        white   = "#ffffff",
-        yellow  = "#fdbc4b",
-    },
-    normal = {
-        black   = "#232627",
-        blue    = "#1d99f3",
-        cyan    = "#1abc9c",
-        green   = "#11d116",
-        magenta = "#9b59b6",
-        red     = "#ed1515",
-        white   = "#fcfcfc",
-        yellow  = "#f67400",
-    },
-    dim    = {
-        black   = "#31363b",
-        blue    = "#1b668f",
-        cyan    = "#186c60",
-        green   = "#17a262",
-        magenta = "#614a73",
-        red     = "#783228",
-        white   = "#63686d",
-        yellow  = "#b65619",
-    },
-}
+theme.wibar_widget_margin = 5
+theme.wibar_widget_bg = "#21272a"
+theme.wibar_widget_fg = "#ffffff"
+theme.wibar_widget_border_color = "#ffffff"
+theme.wibar_widget_border_width = 1
 
-theme.MAX_ALPHA = 65535
-theme.modules = {}
-
-theme.modules.date = {
-    widget = {
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width = 1,
-        },
-    },
-    icon = {
-        calendar = themes_path .. "icons/calendar.svg",
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 2,
-        },
-    },
-    popup = {
-        border_color = colors.bright.white,
-        border_width  = 1,
-    },
-}
-
-theme.modules.time = {
-    widget = {
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 1,
-        },
-    },
-    icon = {
-        clock = themes_path .. "icons/clock.svg",
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 2,
-        },
-    }
-}
-
-theme.modules.volume = {
-    widget = {
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 1,
-        },
-    },
-    icon = {
-        volume = themes_path .. "icons/volume.svg",
-        mute = themes_path .. "icons/muted.svg",
-        percent = "%",
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.red,
-            border_color = colors.bright.white,
-            border_width  = 2,
-        },
-    }
-}
-
-theme.modules.ddcutil = {
-    widget = {
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 1,
-        },
-    },
-    icon = {
-        brightness = themes_path .. "icons/ddcutil_brightness.svg",
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 2,
-        },
-    }
-}
-
-theme.modules.systray = {
-    widget = {
-        markup = {
-            background = colors.bright.black,
-            foreground = colors.bright.white,
-            alpha      = theme.MAX_ALPHA,
-        },
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 1,
-        },
-    },
-    icon = {
-        menu = themes_path .. "icons/menu.svg",
-        background_container = {
-            background   = colors.bright.black,
-            foreground   = colors.bright.white,
-            border_color = colors.bright.white,
-            border_width  = 2,
-        },
-    },
-    popup = {
-        border_color = colors.bright.white,
-        border_width  = 1,
-    }
-}
-
-theme.modules.layoutbox = {
-    background   = colors.bright.black,
-    foreground   = colors.bright.white,
-    border_color = colors.bright.white,
-    border_width  = 1,
-}
-
-theme.systray_icon_spacing = 5
-theme.thin_space = " "
+theme.volume_icon_on = themes_path .. "icons/volume/volume.svg"
+theme.volume_icon_off = themes_path .. "icons/volume/muted.svg"
+theme.brightness_icon = themes_path .. "icons/ddcutil/brightness.svg"
+theme.time_icon = themes_path .. "icons/clock/clock.svg"
+theme.date_icon = themes_path .. "icons/calendar/calendar.svg"
+theme.trash_icon = themes_path .. "icons/calendar/tash.svg"
 
 return theme

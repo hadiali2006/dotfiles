@@ -1,7 +1,7 @@
+local require = require
 local awful = require("awful")
 
 return {
-    mod  = "Mod4",
     tags = {
         " 1 ",
         " 2 ",
@@ -11,7 +11,7 @@ return {
         " 6 ",
         " 7 ",
         " 8 ",
-        " 9 "
+        " 9 ",
     },
     layouts = {
         awful.layout.suit.tile,
@@ -21,11 +21,11 @@ return {
         -- awful.layout.suit.tile.top,
         -- awful.layout.suit.fair,
         -- awful.layout.suit.fair.horizontal,
-        --awful.layout.suit.spiral,
-        --awful.layout.suit.spiral.dwindle,
-        --awful.layout.suit.max.fullscreen,
+        -- awful.layout.suit.spiral,
+        -- awful.layout.suit.spiral.dwindle,
         awful.layout.suit.max,
-        --awful.layout.suit.magnifier,
-        -- awful.layout.suit.corner.nw
-    }
+        -- awful.layout.suit.max.fullscreen,
+        -- awful.layout.suit.magnifier,
+        -- awful.layout.suit.corner.nw,
+    },
 }

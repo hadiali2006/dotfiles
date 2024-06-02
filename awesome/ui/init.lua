@@ -1,3 +1,4 @@
+local require = require
 return {
     menu         = require(... .. ".menu"),
     notification = require(... .. ".notification"),

@@ -1,24 +1,24 @@
-local awful  = require("awful")
-local wibox  = require("wibox")
-local module = require(... .. ".modules")
+local awful = require("awful")
+local wibox = require("wibox")
 
-local left_widgets = function (s)
+local module = require(... .. ".module")
+
+local left_widgets = function(s)
     return {
         {
-        wibox.widget.textbox(" "),
-        -- module.launcher(),
-        module.systray(),
-        module.volume(),
-        module.brightness(),
-        module.taglist(s),
-        spacing = 15,
-        spacing_widget = wibox.widget.separator,
-        layout = wibox.layout.fixed.horizontal,
+            wibox.widget.textbox(" "),
+            -- module.launcher(),
+            module.systray(),
+            module.volume(),
+            module.brightness(),
+            module.taglist(s),
+            spacing = 15,
+            spacing_widget = wibox.widget.separator,
+            layout = wibox.layout.fixed.horizontal,
         },
         s.mypromptbox,
         layout = wibox.layout.fixed.horizontal,
     }
-
 end
 
 local middle_widget = function(s)
@@ -39,17 +39,16 @@ local right_widgets = function(s)
     }
 end
 
-return function(s)
-    s.mypromptbox = awful.widget.prompt()
-
-    s.mywibox = awful.wibar({
+return function(screen)
+    screen.mypromptbox = awful.widget.prompt()
+    screen.mywibox = awful.wibar({
         position = "top",
-        screen   = s,
-        widget   = {
+        screen = screen,
+        widget = {
             layout = wibox.layout.align.horizontal,
-            left_widgets(s),
-            middle_widget(s),
-            right_widgets(s)
-        }
+            left_widgets(screen),
+            middle_widget(screen),
+            right_widgets(screen),
+        },
     })
 end
