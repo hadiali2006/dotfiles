@@ -145,6 +145,7 @@ theme.volume_icon_off = themes_path .. "icons/volume/muted.svg"
 theme.brightness_icon = themes_path .. "icons/ddcutil/brightness.svg"
 theme.time_icon = themes_path .. "icons/clock/clock.svg"
 theme.date_icon = themes_path .. "icons/calendar/calendar.svg"
-theme.trash_icon = themes_path .. "icons/calendar/tash.svg"
+theme.menu_icon = themes_path .. "icons/menu/menu2.svg"
+theme.trash_icon = themes_path .. "icons/calendar/trash.svg"
 
 return theme

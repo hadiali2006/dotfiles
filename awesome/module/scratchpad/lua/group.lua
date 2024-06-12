@@ -1,11 +1,11 @@
 ---@meta
----@module "group"
 
 --[[
 
 Scratchpad Group module for AwesomeWM.
 
-]]--
+]]
+--
 
 local math = math
 local pairs = pairs
@@ -21,7 +21,7 @@ local utils = require(tostring(...):match(".*scratchpad.lua") .. ".utils")
 
 ---@class group: gears.object
 ---@field id string # Identifier.
----@field scratchpads table<string|number, scratchpad> # Table of scratchpads.
+---@field scratchpads { key: string|number, value: scratchpad } # Table of scratchpads.
 local group = {}
 
 ---Constructor of the Scratchpad Group object.
@@ -31,7 +31,7 @@ function group:new(args)
     local object = setmetatable({}, self)
     self.__index = self
     args.validate = args.validate or true
-    object.id          = args.id          or string.sub(math.random(), 3)
+    object.id = args.id or string.sub(math.random(), 3)
     object.scratchpads = args.scratchpads or {}
     if args.validate then
         if not utils.validate_group_config(object) then
@@ -72,7 +72,9 @@ end
 ---@param key (string|number)? # Key/Index in the scratchpad table.
 ---@return scratchpad: Scratchpad object.
 function group:get_scratchpad(scratchpad_id, key)
-    if key and self.scratchpads[key] then return self.scratchpads[key] end
+    if key and self.scratchpads[key] then
+        return self.scratchpads[key]
+    end
     local ret
     for _, scratchpad in pairs(self.scratchpads) do
         if scratchpad_id == scratchpad.id then
@@ -96,8 +98,12 @@ end
 ---@param key (string|number)? # Key/Index in the scratchpad table.
 ---@param callback fun(scratchpad: scratchpad): nil # Function to run.
 function group:do_for_scratchpad(scratchpad_id, key, callback)
-    if key and self.scratchpads[key] then callback(self.scratchpads[key]) end
-    if not scratchpad_id then return end
+    if key and self.scratchpads[key] then
+        callback(self.scratchpads[key])
+    end
+    if not scratchpad_id then
+        return
+    end
     for _, scratchpad in pairs(self.scratchpads) do
         if scratchpad_id == scratchpad.id then
             callback(scratchpad)

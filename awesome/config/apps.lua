@@ -7,6 +7,7 @@ apps.editor = os.getenv("EDITOR") or "nvim"
 apps.editor_cmd = apps.terminal .. " -e " .. apps.editor
 require("menubar").utils.terminal = apps.terminal
 local autostart_programs = {
+    "xset r rate 300 50",
     "unclutter",
     "picom --config "
         .. gears.filesystem.get_configuration_dir()

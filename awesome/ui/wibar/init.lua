@@ -8,10 +8,10 @@ local left_widgets = function(s)
         {
             wibox.widget.textbox(" "),
             -- module.launcher(),
-            module.systray(),
+            module.menu(),
             module.volume(),
             module.brightness(),
-            module.taglist(s),
+            -- module.taglist(s),
             spacing = 15,
             spacing_widget = wibox.widget.separator,
             layout = wibox.layout.fixed.horizontal,
@@ -23,7 +23,8 @@ end
 
 local middle_widget = function(s)
     return {
-        widget = module.tasklist(s),
+        -- widget = module.tasklist(s),
+        widget = module.taglist(s),
     }
 end
 
@@ -45,6 +46,7 @@ return function(screen)
         position = "top",
         screen = screen,
         widget = {
+            expand = "none",
             layout = wibox.layout.align.horizontal,
             left_widgets(screen),
             middle_widget(screen),

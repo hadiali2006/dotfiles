@@ -2,7 +2,9 @@ local require = require
 local awful = require("awful")
 local mod = require("binds.mod")
 return {
-
+    awful.key({ mod.super, }, "g", function(c)
+        c.hidden = true
+    end),
     awful.key({ mod.super, mod.shift }, "t",
         awful.titlebar.toggle,
         { description = "toggle titlebar", group = "client" }
